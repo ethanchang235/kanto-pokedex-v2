@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex - Kanto Region</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Pokédex</h1>
+        <p>First 151 Pokémon (Gen 1)</p>
+    </header>
+
+    <main>
+        <div id="pokedex-grid" class="pokedex-grid">
+            <!-- Pokémon cards will be inserted here by JavaScript -->
+            <div id="loading-message">Loading Pokémon...</div>
+        </div>
+    </main>
+
+    <!-- Modal Structure (initially hidden) -->
+    <div id="pokemon-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h2 id="modal-pokemon-name">Pokémon Name</h2>
+            <p id="modal-pokemon-number">#000</p>
+            <img id="modal-pokemon-sprite" src="" alt="Pokemon Sprite">
+            <div id="modal-pokemon-types" class="types-container">
+                <!-- Type badges will be inserted here -->
+            </div>
+            <div class="pokemon-details">
+                <div>
+                    <p><strong>Height:</strong> <span id="modal-pokemon-height">N/A</span></p>
+                </div>
+                <div>
+                    <p><strong>Weight:</strong> <span id="modal-pokemon-weight">N/A</span></p>
+                </div>
+            </div>
+            <div id="modal-pokemon-description-container">
+                 <p id="modal-pokemon-description">Description loading...</p>
+            </div>
+
+            <h3>Base Stats</h3>
+            <div id="modal-pokemon-stats" class="stats-container">
+                <!-- Stats bars will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
