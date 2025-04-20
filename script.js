@@ -1,7 +1,8 @@
-// DOM Elements
+// === DOM Elements (add new ones) ===
 const pokedexGrid = document.getElementById('pokedex-grid');
 const loadingMessage = document.getElementById('loading-message');
-const searchInput = document.getElementById('search-input'); // Search input
+const searchInput = document.getElementById('search-input');
+const typeFilterContainer = document.getElementById('type-filter-container'); // Type filter buttons container
 const modal = document.getElementById('pokemon-modal');
 const modalContent = document.querySelector('.modal-content');
 const closeModalButton = document.querySelector('.close-button');
@@ -13,89 +14,104 @@ const modalPokemonHeight = document.getElementById('modal-pokemon-height');
 const modalPokemonWeight = document.getElementById('modal-pokemon-weight');
 const modalPokemonDescription = document.getElementById('modal-pokemon-description');
 const modalPokemonStats = document.getElementById('modal-pokemon-stats');
-const shinyToggleButton = document.getElementById('shiny-toggle'); // Shiny toggle button
-const evolutionContainer = document.getElementById('modal-evolution-chain'); // Evolution chain container
-const evolutionLoading = document.getElementById('evolution-loading'); // Loading text for evolution
+const shinyToggleButton = document.getElementById('shiny-toggle');
+const favoriteToggleButtonModal = document.getElementById('favorite-toggle'); // Favorite button in modal
+const evolutionContainer = document.getElementById('modal-evolution-chain');
+const evolutionLoading = document.getElementById('evolution-loading');
+const typeEffectivenessContainer = document.getElementById('modal-type-effectiveness'); // Type effectiveness container
+const effectivenessLoading = document.getElementById('effectiveness-loading'); // Loading text for effectiveness
 
-const POKEMON_COUNT = 151; // Kanto Region
+const POKEMON_COUNT = 151;
 const POKEAPI_URL = 'https://pokeapi.co/api/v2/pokemon/';
 const POKEAPI_SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 const POKEAPI_EVOLUTION_URL = 'https://pokeapi.co/api/v2/evolution-chain/';
+const POKEAPI_TYPE_URL = 'https://pokeapi.co/api/v2/type/';
 
-// Store fetched data to avoid repeated API calls
+// === Caches ===
 const pokemonCache = {};
 const speciesCache = {};
 const evolutionCache = {};
+const typeDataCache = {}; // Cache for fetched type data
 
-// Store references to all pokemon card elements for filtering
-let allPokemonCards = [];
-
-// --- Helper Functions ---
-
-// Format Pokemon ID with leading zeros
-const formatPokemonId = (id) => {
-    return `#${String(id).padStart(3, '0')}`;
+// === State Variables ===
+let allPokemonData = []; // Store fetched data for all Pokemon for filtering
+let currentFilters = {
+    searchTerm: '',
+    selectedType: 'all' // 'all' or a specific type name
 };
+let favorites = []; // Array to hold favorite Pokémon IDs
 
-// Fetch basic data for a single Pokemon
-const fetchPokemonData = async (idOrName) => {
-    const identifier = String(idOrName).toLowerCase();
-    if (pokemonCache[identifier]) {
-        return pokemonCache[identifier];
+// === Helper Functions ===
+const formatPokemonId = (id) => `#${String(id).padStart(3, '0')}`;
+
+// Generic fetch function with caching
+const fetchData = async (url, cache) => {
+    if (cache[url]) {
+        return cache[url];
     }
     try {
-        const response = await fetch(`${POKEAPI_URL}${identifier}`);
+        const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        pokemonCache[identifier] = data; // Cache by id
-        pokemonCache[data.name] = data; // Cache by name too
+        cache[url] = data;
         return data;
     } catch (error) {
-        console.error(`Could not fetch Pokemon data for ${identifier}:`, error);
+        console.error(`Could not fetch data from ${url}:`, error);
         return null;
     }
 };
 
-// Fetch species data
-const fetchSpeciesData = async (idOrName) => {
-    const identifier = String(idOrName).toLowerCase();
-    if (speciesCache[identifier]) {
-        return speciesCache[identifier];
-    }
-    try {
-        const response = await fetch(`${POKEAPI_SPECIES_URL}${identifier}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        speciesCache[identifier] = data; // Cache by id/name used
-        speciesCache[data.id] = data;   // Cache by actual ID
-        speciesCache[data.name] = data; // Cache by actual name
-        return data;
-    } catch (error) {
-        console.error(`Could not fetch species data for ${identifier}:`, error);
-        return null;
+// Specific fetch functions using the generic one
+const fetchPokemonData = (idOrName) => fetchData(`${POKEAPI_URL}${String(idOrName).toLowerCase()}`, pokemonCache);
+const fetchSpeciesData = (idOrName) => fetchData(`${POKEAPI_SPECIES_URL}${String(idOrName).toLowerCase()}`, speciesCache);
+const fetchEvolutionChain = (chainId) => chainId ? fetchData(`${POKEAPI_EVOLUTION_URL}${chainId}`, evolutionCache) : null;
+const fetchTypeData = (typeName) => fetchData(`${POKEAPI_TYPE_URL}${typeName}`, typeDataCache);
+
+
+// --- Favorites Management ---
+const loadFavorites = () => {
+    const favs = localStorage.getItem('kantoFavorites');
+    favorites = favs ? JSON.parse(favs) : [];
+};
+
+const saveFavorites = () => {
+    localStorage.setItem('kantoFavorites', JSON.stringify(favorites));
+};
+
+const isFavorite = (pokemonId) => {
+    return favorites.includes(parseInt(pokemonId)); // Ensure ID is number for comparison
+};
+
+const addFavorite = (pokemonId) => {
+    const id = parseInt(pokemonId);
+    if (!isFavorite(id)) {
+        favorites.push(id);
+        saveFavorites();
     }
 };
 
-// Fetch evolution chain data
-const fetchEvolutionChain = async (chainId) => {
-    if (evolutionCache[chainId]) {
-        return evolutionCache[chainId];
-    }
-     if (!chainId) {
-        console.error("No evolution chain ID provided.");
-        return null;
-    }
-    try {
-        const response = await fetch(`${POKEAPI_EVOLUTION_URL}${chainId}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        evolutionCache[chainId] = data;
-        return data;
-    } catch (error) {
-        console.error(`Could not fetch evolution chain ${chainId}:`, error);
-        return null;
-    }
+const removeFavorite = (pokemonId) => {
+    const id = parseInt(pokemonId);
+    favorites = favorites.filter(favId => favId !== id);
+    saveFavorites();
 };
+
+const toggleFavorite = (pokemonId, buttonElement, cardElement = null) => {
+     const id = parseInt(pokemonId);
+     if (isFavorite(id)) {
+         removeFavorite(id);
+         buttonElement.classList.remove('active');
+         buttonElement.textContent = '☆'; // Outline star
+         buttonElement.title = 'Add to Favorites';
+         cardElement?.classList.remove('favorite-card'); // Update card style if provided
+     } else {
+         addFavorite(id);
+         buttonElement.classList.add('active');
+         buttonElement.textContent = '★'; // Filled star
+         buttonElement.title = 'Remove from Favorites';
+         cardElement?.classList.add('favorite-card'); // Update card style if provided
+     }
+ };
 
 
 // --- UI Functions ---
@@ -104,69 +120,190 @@ const fetchEvolutionChain = async (chainId) => {
 const createPokemonCard = (pokemonData) => {
     const card = document.createElement('div');
     card.classList.add('pokemon-card');
+    // Add favorite class immediately if it's a favorite on load
+    if (isFavorite(pokemonData.id)) {
+        card.classList.add('favorite-card'); // Add a class for potential styling
+    }
     card.dataset.pokemonId = pokemonData.id;
-    card.dataset.pokemonName = pokemonData.name; // Store name for searching
+    card.dataset.pokemonName = pokemonData.name;
+    // Store types directly on the card for filtering
+    card.dataset.pokemonTypes = JSON.stringify(pokemonData.types.map(t => t.type.name));
 
     const spriteUrl = pokemonData.sprites?.front_default || 'placeholder.png';
     const pokemonName = pokemonData.name;
     const pokemonIdFormatted = formatPokemonId(pokemonData.id);
 
+    // Add favorite button to card
+    const favButton = document.createElement('button');
+    favButton.classList.add('favorite-button');
+    favButton.title = isFavorite(pokemonData.id) ? 'Remove from Favorites' : 'Add to Favorites';
+    favButton.textContent = isFavorite(pokemonData.id) ? '★' : '☆';
+    if (isFavorite(pokemonData.id)) favButton.classList.add('active');
+    favButton.onclick = (event) => {
+        event.stopPropagation(); // Prevent modal opening when clicking favorite star
+        toggleFavorite(pokemonData.id, favButton, card);
+    };
+
     card.innerHTML = `
-        <img src="${spriteUrl}" alt="${pokemonName}" loading="lazy"> <!-- Added lazy loading -->
+        <img src="${spriteUrl}" alt="${pokemonName}" loading="lazy">
         <h3>${pokemonName}</h3>
         <p>${pokemonIdFormatted}</p>
     `;
+    card.appendChild(favButton); // Append the button
 
     card.addEventListener('click', () => displayPokemonModal(pokemonData.id));
     return card;
 };
 
-// Filter displayed Pokemon based on search input
-const filterPokemon = () => {
-    const searchTerm = searchInput.value.toLowerCase();
-    allPokemonCards.forEach(card => {
-        const pokemonName = card.dataset.pokemonName;
-        if (pokemonName.includes(searchTerm)) {
-            card.style.display = 'block'; // Show matching cards
+// Apply current filters (search term and type) to the grid
+const applyFilters = () => {
+    const searchTerm = currentFilters.searchTerm;
+    const selectedType = currentFilters.selectedType;
+
+    allPokemonData.forEach(pokemonData => {
+        const card = pokedexGrid.querySelector(`.pokemon-card[data-pokemon-id="${pokemonData.id}"]`);
+        if (!card) return; // Skip if card not found
+
+        const nameMatch = pokemonData.name.includes(searchTerm);
+        const pokemonTypes = pokemonData.types.map(t => t.type.name);
+        const typeMatch = selectedType === 'all' || pokemonTypes.includes(selectedType);
+
+        if (nameMatch && typeMatch) {
+            card.style.display = 'block';
         } else {
-            card.style.display = 'none'; // Hide non-matching cards
+            card.style.display = 'none';
         }
     });
+};
+
+// Event handler for search input
+const handleSearchInput = (event) => {
+    currentFilters.searchTerm = event.target.value.toLowerCase();
+    applyFilters();
+};
+
+// Event handler for type filter buttons
+const handleTypeFilterClick = (event) => {
+    const targetButton = event.target.closest('.type-filter-button');
+    if (!targetButton) return; // Ignore clicks not on a button
+
+    const selectedType = targetButton.dataset.type;
+    currentFilters.selectedType = selectedType;
+
+    // Update button active states
+    document.querySelectorAll('.type-filter-button').forEach(button => {
+        button.classList.toggle('active', button.dataset.type === selectedType);
+    });
+
+    applyFilters();
 };
 
 // Reset and clear modal content before loading new data
 const resetModal = () => {
     modalPokemonName.textContent = 'Loading...';
     modalPokemonNumber.textContent = '#???';
-    modalPokemonSprite.src = ''; // Or a placeholder loading image
+    modalPokemonSprite.src = '';
     modalPokemonSprite.alt = 'Loading sprite';
     modalPokemonTypes.innerHTML = '';
     modalPokemonHeight.textContent = 'N/A';
     modalPokemonWeight.textContent = 'N/A';
     modalPokemonDescription.textContent = 'Loading description...';
     modalPokemonStats.innerHTML = '';
-    evolutionContainer.innerHTML = '<p id="evolution-loading">Loading evolution...</p>'; // Reset evolution section
-    shinyToggleButton.classList.remove('active'); // Ensure shiny toggle is off
-    shinyToggleButton.onclick = null; // Remove previous click handler
+    evolutionContainer.innerHTML = '<p id="evolution-loading">Loading evolution...</p>';
+    typeEffectivenessContainer.innerHTML = '<p id="effectiveness-loading">Calculating effectiveness...</p>';
+    shinyToggleButton.classList.remove('active');
+    shinyToggleButton.style.display = 'none'; // Hide until checked
+    shinyToggleButton.onclick = null;
+    favoriteToggleButtonModal.classList.remove('active'); // Reset favorite button style
+    favoriteToggleButtonModal.textContent = '☆';
+    favoriteToggleButtonModal.onclick = null; // Remove old handler
 };
 
-// Populate and display the modal
+
+// --- Type Effectiveness Calculation ---
+const calculateTypeEffectiveness = async (pokemonTypes) => {
+    const typeNames = pokemonTypes.map(t => t.type.name);
+    const effectiveness = {
+        weak: new Set(),      // x2 or x4
+        resistant: new Set(), // x0.5 or x0.25
+        immune: new Set()       // x0
+    };
+
+    const allDamageRelations = await Promise.all(typeNames.map(name => fetchTypeData(name)));
+
+    const allTypes = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"]; // Gen 1 relevant + futureproofing
+
+    allTypes.forEach(attackingType => {
+        let multiplier = 1;
+        allDamageRelations.forEach(typeData => {
+            if (!typeData) return; // Skip if type data failed to load
+            const relations = typeData.damage_relations;
+            if (relations.double_damage_from.some(t => t.name === attackingType)) multiplier *= 2;
+            if (relations.half_damage_from.some(t => t.name === attackingType)) multiplier *= 0.5;
+            if (relations.no_damage_from.some(t => t.name === attackingType)) multiplier *= 0;
+        });
+
+        if (multiplier >= 2) effectiveness.weak.add(attackingType);
+        else if (multiplier > 0 && multiplier < 1) effectiveness.resistant.add(attackingType);
+        else if (multiplier === 0) effectiveness.immune.add(attackingType);
+    });
+
+    return effectiveness;
+};
+
+// Display Type Effectiveness in the Modal
+const displayTypeEffectiveness = (effectivenessData) => {
+    typeEffectivenessContainer.innerHTML = ''; // Clear loading message
+
+    const createList = (types, title) => {
+        if (types.size === 0) return; // Don't show section if no types
+
+        const section = document.createElement('div');
+        section.classList.add('effectiveness-section');
+        const heading = document.createElement('h4');
+        heading.textContent = title;
+        const list = document.createElement('ul');
+        list.classList.add('type-effectiveness-list');
+
+        types.forEach(typeName => {
+            const li = document.createElement('li');
+            const badge = document.createElement('span');
+            badge.classList.add('type-badge', `type-${typeName}`);
+            badge.textContent = typeName;
+            li.appendChild(badge);
+            list.appendChild(li);
+        });
+
+        section.appendChild(heading);
+        section.appendChild(list);
+        typeEffectivenessContainer.appendChild(section);
+    };
+
+    createList(effectivenessData.weak, 'Weak Against (x2 or x4)');
+    createList(effectivenessData.resistant, 'Resistant To (x0.5 or x0.25)');
+    createList(effectivenessData.immune, 'Immune To (x0)');
+
+    if (typeEffectivenessContainer.innerHTML === '') {
+         typeEffectivenessContainer.innerHTML = '<p>Normal effectiveness against all types.</p>';
+    }
+};
+
+// --- Modal Display Logic (Updated) ---
 const displayPokemonModal = async (id) => {
-    resetModal(); // Clear previous data first
-    modal.style.display = 'flex'; // Show modal immediately
+    resetModal();
+    modal.style.display = 'flex';
 
-    // --- Fetch required data concurrently ---
-    const pokemonDataPromise = fetchPokemonData(id);
-    const speciesDataPromise = fetchSpeciesData(id);
-    const [pokemonData, speciesData] = await Promise.all([pokemonDataPromise, speciesDataPromise]);
-
+    const pokemonData = await fetchPokemonData(id); // Ensure we have the main data first
     if (!pokemonData) {
         modalPokemonName.textContent = 'Error';
         modalPokemonDescription.textContent = 'Could not load Pokémon data.';
-        return; // Exit if primary data fails
+        return;
     }
 
-    // --- Update basic info ---
+    // Fetch species data concurrently while updating basic info
+    const speciesDataPromise = fetchSpeciesData(id);
+
+    // --- Update basic info & Setup Buttons ---
     modalPokemonName.textContent = pokemonData.name;
     modalPokemonNumber.textContent = formatPokemonId(pokemonData.id);
     const defaultSprite = pokemonData.sprites?.front_default || 'placeholder.png';
@@ -176,18 +313,30 @@ const displayPokemonModal = async (id) => {
     modalPokemonHeight.textContent = `${pokemonData.height / 10} m`;
     modalPokemonWeight.textContent = `${pokemonData.weight / 10} kg`;
 
-    // --- Shiny Toggle Logic ---
+    // Shiny Toggle Setup
     let isShiny = false;
-    if (shinySprite) { // Only enable toggle if shiny sprite exists
-        shinyToggleButton.style.display = 'inline-block'; // Show the button
+    if (shinySprite) {
+        shinyToggleButton.style.display = 'inline-block';
         shinyToggleButton.onclick = () => {
             isShiny = !isShiny;
             modalPokemonSprite.src = isShiny ? shinySprite : defaultSprite;
             shinyToggleButton.classList.toggle('active', isShiny);
         };
-    } else {
-        shinyToggleButton.style.display = 'none'; // Hide button if no shiny
     }
+
+    // Favorite Toggle Setup
+    const pokemonId = pokemonData.id;
+    const isCurrentlyFavorite = isFavorite(pokemonId);
+    favoriteToggleButtonModal.classList.toggle('active', isCurrentlyFavorite);
+    favoriteToggleButtonModal.textContent = isCurrentlyFavorite ? '★' : '☆';
+    favoriteToggleButtonModal.title = isCurrentlyFavorite ? 'Remove from Favorites' : 'Add to Favorites';
+    favoriteToggleButtonModal.onclick = () => {
+        // Find the corresponding card in the grid to update its star too
+        const cardElement = pokedexGrid.querySelector(`.pokemon-card[data-pokemon-id="${pokemonId}"]`);
+        const cardFavButton = cardElement?.querySelector('.favorite-button');
+        toggleFavorite(pokemonId, favoriteToggleButtonModal); // Update modal button
+        if(cardFavButton) toggleFavorite(pokemonId, cardFavButton, cardElement); // Update card button & style
+    };
 
 
     // --- Update types ---
@@ -199,22 +348,11 @@ const displayPokemonModal = async (id) => {
         modalPokemonTypes.appendChild(typeSpan);
     });
 
-    // --- Update description ---
-    let description = "No description available.";
-    if (speciesData && speciesData.flavor_text_entries) {
-        const englishEntry = speciesData.flavor_text_entries.find(
-            entry => entry.language.name === 'en'
-        );
-        if (englishEntry) {
-            description = englishEntry.flavor_text.replace(/[\n\f\r]/g, ' '); // Clean up text
-        }
-    }
-    modalPokemonDescription.textContent = description;
-
     // --- Update stats ---
     modalPokemonStats.innerHTML = '';
-    const maxStatValue = 200; // Visual scaling reference
+    const maxStatValue = 200;
     pokemonData.stats.forEach(statInfo => {
+         // ... (stat bar generation code - unchanged) ...
         const statRow = document.createElement('div');
         statRow.classList.add('stat-row', `stat-${statInfo.stat.name.replace('special-', 'sp-')}`);
         const statValue = statInfo.base_stat;
@@ -229,12 +367,25 @@ const displayPokemonModal = async (id) => {
         modalPokemonStats.appendChild(statRow);
     });
 
-    // --- Fetch and Display Evolution Chain ---
-    if (speciesData && speciesData.evolution_chain?.url) {
+
+    // --- Wait for Species Data then Process Dependent Info ---
+    const speciesData = await speciesDataPromise;
+
+    // Update description
+    let description = "No description available.";
+    if (speciesData?.flavor_text_entries) {
+        const englishEntry = speciesData.flavor_text_entries.find(entry => entry.language.name === 'en');
+        if (englishEntry) description = englishEntry.flavor_text.replace(/[\n\f\r]/g, ' ');
+    }
+    modalPokemonDescription.textContent = description;
+
+    // Fetch and Display Evolution Chain
+    if (speciesData?.evolution_chain?.url) {
         try {
-            const chainId = speciesData.evolution_chain.url.split('/').filter(Boolean).pop(); // Extract ID from URL
+            const chainId = speciesData.evolution_chain.url.split('/').filter(Boolean).pop();
             const evolutionData = await fetchEvolutionChain(chainId);
-            displayEvolutionChain(evolutionData.chain);
+            if(evolutionData) await displayEvolutionChain(evolutionData.chain); // Make sure displayEvolutionChain is async if it fetches data
+            else evolutionContainer.innerHTML = '<p>Could not load evolution data.</p>';
         } catch (error) {
             console.error("Error fetching/processing evolution chain:", error);
             evolutionContainer.innerHTML = '<p>Could not load evolution data.</p>';
@@ -242,12 +393,20 @@ const displayPokemonModal = async (id) => {
     } else {
         evolutionContainer.innerHTML = '<p>No evolution data found.</p>';
     }
+
+     // Calculate and Display Type Effectiveness
+     try {
+         const effectivenessData = await calculateTypeEffectiveness(pokemonData.types);
+         displayTypeEffectiveness(effectivenessData);
+     } catch (error) {
+         console.error("Error calculating/displaying type effectiveness:", error);
+         typeEffectivenessContainer.innerHTML = '<p>Could not calculate effectiveness.</p>';
+     }
 };
 
-// Recursively parse and display the evolution chain
+// Recursive parse and display the evolution chain (needs to be async now)
 const displayEvolutionChain = async (chainData) => {
     evolutionContainer.innerHTML = ''; // Clear loading/previous chain
-
     let currentStage = chainData;
     let stageCount = 0;
 
@@ -255,47 +414,41 @@ const displayEvolutionChain = async (chainData) => {
         stageCount++;
         const speciesName = currentStage.species.name;
 
-        // Add arrow between stages (except before the first one)
         if (stageCount > 1) {
             const arrow = document.createElement('div');
             arrow.classList.add('evolution-arrow');
-            arrow.innerHTML = '→'; // Right arrow symbol
+            arrow.innerHTML = '→';
             evolutionContainer.appendChild(arrow);
         }
 
-        // Fetch minimal data for the sprite
-        const stagePokemonData = await fetchPokemonData(speciesName);
+        // Fetch data for the sprite (use await)
+        const stagePokemonData = await fetchPokemonData(speciesName); // Await fetch
         const spriteUrl = stagePokemonData?.sprites?.front_default || 'placeholder.png';
 
         const stageDiv = document.createElement('div');
         stageDiv.classList.add('evolution-stage');
-        // Make the stage clickable to show that Pokémon's details
         stageDiv.onclick = () => {
-            hideModal(); // Close current modal first
-            displayPokemonModal(speciesName); // Open modal for the clicked stage
+            // NOTE: Potential infinite loop if clicking same pokemon in chain - consider disabling click for current pokemon
+            const currentModalPokemonId = parseInt(modalPokemonNumber.textContent.substring(1));
+            if (stagePokemonData && stagePokemonData.id !== currentModalPokemonId) {
+                 hideModal();
+                 displayPokemonModal(stagePokemonData.id);
+            }
         };
-
         stageDiv.innerHTML = `
             <img src="${spriteUrl}" alt="${speciesName}" loading="lazy">
             <span>${speciesName}</span>
         `;
         evolutionContainer.appendChild(stageDiv);
 
-        // Move to the next stage in the chain
         if (currentStage.evolves_to.length > 0) {
-             // Simple case: assume only the first evolution path for Gen 1 (no branching like Eevee here yet)
-             // For full support, you'd need to handle branches (e.g. Eevee -> Vaporeon/Jolteon/Flareon)
              currentStage = currentStage.evolves_to[0];
         } else {
-            currentStage = null; // End of chain
+            currentStage = null;
         }
     }
-
-     if (stageCount === 0) {
-         evolutionContainer.innerHTML = '<p>No evolution data found.</p>';
-     }
+    if (stageCount === 0) evolutionContainer.innerHTML = '<p>No evolution data found.</p>';
 };
-
 
 // Hide the modal
 const hideModal = () => {
@@ -303,62 +456,53 @@ const hideModal = () => {
 };
 
 // --- Event Listeners ---
-
-// Filter Pokemon on search input
-searchInput.addEventListener('input', filterPokemon);
-
-// Close modal listeners
+searchInput.addEventListener('input', handleSearchInput);
+typeFilterContainer.addEventListener('click', handleTypeFilterClick); // Add listener for type filters
 closeModalButton.addEventListener('click', hideModal);
-window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        hideModal();
-    }
-});
-// Close modal on Escape key press
-window.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.style.display === 'flex') {
-        hideModal();
-    }
-});
+window.addEventListener('click', (event) => { if (event.target === modal) hideModal(); });
+window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.style.display === 'flex') hideModal(); });
 
 
 // --- Initialization ---
+const initializePokedex = async () => {
+    loadFavorites(); // Load favorites from localStorage first
+    loadingMessage.style.display = 'block';
+    pokedexGrid.innerHTML = ''; // Clear grid initially
 
-// Fetch all Pokemon and create cards
-const fetchAndDisplayPokemon = async () => {
     try {
         const pokemonPromises = [];
         for (let i = 1; i <= POKEMON_COUNT; i++) {
-            pokemonPromises.push(fetchPokemonData(i));
+            pokemonPromises.push(fetchPokemonData(i)); // Fetch basic data for all
         }
-        const allPokemonResults = await Promise.all(pokemonPromises);
+        allPokemonData = (await Promise.all(pokemonPromises)).filter(Boolean); // Store fetched data, remove nulls
+
+        if (allPokemonData.length === 0 && POKEMON_COUNT > 0) {
+             throw new Error("Failed to fetch any Pokémon data.");
+        }
+
+        // Populate Type Filters (simple hardcoded for Gen 1)
+        const kantoTypes = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon"];
+        kantoTypes.forEach(type => {
+             const button = document.createElement('button');
+             button.classList.add('type-filter-button', `type-${type}`);
+             button.dataset.type = type;
+             button.textContent = type;
+             typeFilterContainer.appendChild(button);
+        });
+
+        // Create and display cards
+        allPokemonData.forEach(pokemonData => {
+            const card = createPokemonCard(pokemonData);
+            pokedexGrid.appendChild(card);
+        });
 
         loadingMessage.style.display = 'none'; // Hide loading message
 
-        allPokemonCards = []; // Clear previous card references
-        pokedexGrid.innerHTML = ''; // Clear grid before adding new cards
-
-        allPokemonResults.forEach(pokemonData => {
-            if (pokemonData) {
-                const card = createPokemonCard(pokemonData);
-                pokedexGrid.appendChild(card);
-                allPokemonCards.push(card); // Store card reference for filtering
-            } else {
-                 console.warn(`Skipping card creation for a Pokemon due to fetch error.`);
-            }
-        });
-
-        if(allPokemonCards.length === 0 && POKEMON_COUNT > 0) {
-             loadingMessage.textContent = "Failed to load any Pokémon data. Check API or network.";
-             loadingMessage.style.display = 'block';
-        }
-
     } catch (error) {
-        loadingMessage.textContent = "Failed to load Pokémon list.";
-        loadingMessage.style.display = 'block';
-        console.error("Error fetching Pokémon list:", error);
+        loadingMessage.textContent = `Error initializing Pokédex: ${error.message}`;
+        console.error("Initialization Error:", error);
     }
 };
 
 // Initialize the Pokedex on page load
-fetchAndDisplayPokemon();
+initializePokedex();
