@@ -287,3 +287,112 @@ main {
 .stat-special-attack .stat-bar { background-color: #9DB7F5; }
 .stat-special-defense .stat-bar { background-color: #A7DB8D; }
 .stat-speed .stat-bar { background-color: #FA92B2; }
+
+/* === Existing styles remain the same === */
+
+/* Search Bar */
+.search-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#search-input {
+    padding: 10px 15px;
+    width: 80%;
+    max-width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #ef5350;
+    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
+}
+
+/* Modal Header Flex for Shiny Toggle */
+.modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+/* Shiny Toggle Button */
+#shiny-toggle {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+#shiny-toggle:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+#shiny-toggle.active {
+    background-color: #ffd700; /* Gold background when shiny is active */
+    border-color: #e6c200;
+}
+
+
+/* Evolution Chain */
+.evolution-chain-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap; /* Allow wrapping if chain is long */
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.evolution-stage {
+    text-align: center;
+    cursor: pointer; /* Make stages clickable */
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.evolution-stage:hover {
+    background-color: #eee;
+}
+
+.evolution-stage img {
+    width: 70px;
+    height: 70px;
+    display: block;
+    margin: 0 auto 5px auto;
+    image-rendering: pixelated;
+}
+
+.evolution-stage span {
+    font-size: 0.9em;
+    text-transform: capitalize;
+    display: block;
+    color: #555;
+}
+
+.evolution-arrow {
+    font-size: 1.5em;
+    color: #aaa;
+    align-self: center; /* Center arrow vertically */
+}
+
+#evolution-loading {
+    font-style: italic;
+    color: #888;
+}

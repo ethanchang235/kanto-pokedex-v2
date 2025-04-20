@@ -16,17 +16,25 @@
     </header>
 
     <main>
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search Pokémon by name...">
+        </div>
+
         <div id="pokedex-grid" class="pokedex-grid">
             <!-- Pokémon cards will be inserted here by JavaScript -->
             <div id="loading-message">Loading Pokémon...</div>
         </div>
     </main>
 
-    <!-- Modal Structure (initially hidden) -->
+    <!-- Modal Structure -->
     <div id="pokemon-modal" class="modal">
         <div class="modal-content">
             <span class="close-button">×</span>
-            <h2 id="modal-pokemon-name">Pokémon Name</h2>
+            <div class="modal-header">
+                <h2 id="modal-pokemon-name">Pokémon Name</h2>
+                 <button id="shiny-toggle" title="Toggle Shiny Sprite">✨</button> <!-- Shiny Toggle Button -->
+            </div>
             <p id="modal-pokemon-number">#000</p>
             <img id="modal-pokemon-sprite" src="" alt="Pokemon Sprite">
             <div id="modal-pokemon-types" class="types-container">
@@ -48,6 +56,14 @@
             <div id="modal-pokemon-stats" class="stats-container">
                 <!-- Stats bars will be inserted here -->
             </div>
+
+            <!-- Evolution Chain -->
+            <h3>Evolution Chain</h3>
+            <div id="modal-evolution-chain" class="evolution-chain-container">
+                <!-- Evolution chain will be inserted here -->
+                <p id="evolution-loading">Loading evolution...</p>
+            </div>
+
         </div>
     </div>
 
