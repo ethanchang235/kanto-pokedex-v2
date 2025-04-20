@@ -23,15 +23,31 @@
             </div>
             <div id="type-filter-container" class="type-filter-container">
                 <button class="type-filter-button active" data-type="all">All</button>
-                <!-- Type filter buttons will be inserted here by JavaScript -->
+                <!-- Type filter buttons inserted here -->
             </div>
-             <!-- Add Favorite Filter later if desired -->
+             <!-- Sorting Dropdown -->
+            <div class="sort-container">
+                 <label for="sort-select">Sort by:</label>
+                 <select id="sort-select">
+                     <option value="id_asc">Number (Asc)</option>
+                     <option value="id_desc">Number (Desc)</option>
+                     <option value="name_asc">Name (A-Z)</option>
+                     <option value="name_desc">Name (Z-A)</option>
+                 </select>
+            </div>
         </div>
 
 
         <div id="pokedex-grid" class="pokedex-grid">
-            <!-- Pokémon cards will be inserted here by JavaScript -->
+            <!-- Pokémon cards inserted here -->
             <div id="loading-message">Loading Pokémon...</div>
+        </div>
+
+         <!-- Pagination Controls -->
+        <div id="pagination-container" class="pagination-container" style="display: none;"> <!-- Hide initially -->
+            <button id="prev-page" class="pagination-button">Previous</button>
+            <span id="page-info">Page 1 of 1</span>
+            <button id="next-page" class="pagination-button">Next</button>
         </div>
     </main>
 

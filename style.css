@@ -452,7 +452,6 @@ main {
     border-color: #e6c200;
 }
 
-
 /* Evolution Chain */
 .evolution-chain-container {
     display: flex;
@@ -502,4 +501,240 @@ main {
 #evolution-loading {
     font-style: italic;
     color: #888;
+}
+
+/* Type Filter Container */
+.type-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px; /* Keep the gap */
+}
+
+/* --- UPDATED Type Filter Button Styling --- */
+.type-filter-button {
+    /* Inherit base badge styles */
+    display: inline-block;
+    padding: 5px 15px; /* Match modal badges */
+    border-radius: 15px; /* Match modal badges */
+    color: white;
+    font-size: 0.9em; /* Match modal badges */
+    font-weight: bold; /* Match modal badges */
+    text-transform: capitalize; /* Consistent capitalization */
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2); /* Match modal badges */
+    border: none; /* Remove default border */
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Apply type-specific colors directly */
+.type-filter-button.type-normal { background-color: #A8A77A; }
+.type-filter-button.type-fire { background-color: #EE8130; }
+.type-filter-button.type-water { background-color: #6390F0; }
+.type-filter-button.type-electric { background-color: #F7D02C; }
+.type-filter-button.type-grass { background-color: #7AC74C; }
+.type-filter-button.type-ice { background-color: #96D9D6; }
+.type-filter-button.type-fighting { background-color: #C22E28; }
+.type-filter-button.type-poison { background-color: #A33EA1; }
+.type-filter-button.type-ground { background-color: #E2BF65; }
+.type-filter-button.type-flying { background-color: #A98FF3; }
+.type-filter-button.type-psychic { background-color: #F95587; }
+.type-filter-button.type-bug { background-color: #A6B91A; }
+.type-filter-button.type-rock { background-color: #B6A136; }
+.type-filter-button.type-ghost { background-color: #735797; }
+.type-filter-button.type-dragon { background-color: #6F35FC; }
+.type-filter-button.type-steel { background-color: #B7B7CE; }
+.type-filter-button.type-dark { background-color: #705746; }
+.type-filter-button.type-fairy { background-color: #D685AD; }
+
+/* Special style for the 'All' button */
+.type-filter-button[data-type="all"] {
+    background-color: #68A090; /* Neutral Teal */
+}
+
+/* Indicate non-active buttons with opacity */
+.type-filter-button:not(.active) {
+    opacity: 0.65;
+}
+
+.type-filter-button.active {
+    opacity: 1;
+    transform: scale(1.05); /* Slightly enlarge active button */
+}
+
+.type-filter-button:hover:not(.active) {
+     opacity: 0.85; /* Increase opacity slightly on hover for inactive */
+}
+
+/* --- Add Sorting Dropdown Styles --- */
+.sort-container {
+    margin-top: 15px; /* Space above sort */
+    text-align: center;
+}
+
+.sort-container label {
+    margin-right: 8px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+#sort-select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+}
+
+/* --- Add Pagination Styles --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px; /* Space above pagination */
+    margin-bottom: 10px; /* Space below pagination */
+}
+
+.pagination-button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.pagination-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: #eee;
+}
+
+#page-info {
+    font-size: 0.9em;
+    color: #555;
+    margin: 0 10px;
+}
+
+/* Type Filter Container */
+.type-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px; /* Keep the gap */
+}
+
+/* --- UPDATED Type Filter Button Styling --- */
+.type-filter-button {
+    /* Inherit base badge styles */
+    display: inline-block;
+    padding: 5px 15px; /* Match modal badges */
+    border-radius: 15px; /* Match modal badges */
+    color: white;
+    font-size: 0.9em; /* Match modal badges */
+    font-weight: bold; /* Match modal badges */
+    text-transform: capitalize; /* Consistent capitalization */
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2); /* Match modal badges */
+    border: none; /* Remove default border */
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Apply type-specific colors directly */
+.type-filter-button.type-normal { background-color: #A8A77A; }
+.type-filter-button.type-fire { background-color: #EE8130; }
+.type-filter-button.type-water { background-color: #6390F0; }
+.type-filter-button.type-electric { background-color: #F7D02C; }
+.type-filter-button.type-grass { background-color: #7AC74C; }
+.type-filter-button.type-ice { background-color: #96D9D6; }
+.type-filter-button.type-fighting { background-color: #C22E28; }
+.type-filter-button.type-poison { background-color: #A33EA1; }
+.type-filter-button.type-ground { background-color: #E2BF65; }
+.type-filter-button.type-flying { background-color: #A98FF3; }
+.type-filter-button.type-psychic { background-color: #F95587; }
+.type-filter-button.type-bug { background-color: #A6B91A; }
+.type-filter-button.type-rock { background-color: #B6A136; }
+.type-filter-button.type-ghost { background-color: #735797; }
+.type-filter-button.type-dragon { background-color: #6F35FC; }
+.type-filter-button.type-steel { background-color: #B7B7CE; }
+.type-filter-button.type-dark { background-color: #705746; }
+.type-filter-button.type-fairy { background-color: #D685AD; }
+
+/* Special style for the 'All' button */
+.type-filter-button[data-type="all"] {
+    background-color: #68A090; /* Neutral Teal */
+}
+
+/* Indicate non-active buttons with opacity */
+.type-filter-button:not(.active) {
+    opacity: 0.65;
+}
+
+.type-filter-button.active {
+    opacity: 1;
+    transform: scale(1.05); /* Slightly enlarge active button */
+}
+
+.type-filter-button:hover:not(.active) {
+     opacity: 0.85; /* Increase opacity slightly on hover for inactive */
+}
+
+/* --- Add Sorting Dropdown Styles --- */
+.sort-container {
+    margin-top: 15px; /* Space above sort */
+    text-align: center;
+}
+
+.sort-container label {
+    margin-right: 8px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+#sort-select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+}
+
+/* --- Add Pagination Styles --- */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px; /* Space above pagination */
+    margin-bottom: 10px; /* Space below pagination */
+}
+
+.pagination-button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.pagination-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: #eee;
+}
+
+#page-info {
+    font-size: 0.9em;
+    color: #555;
+    margin: 0 10px;
 }
