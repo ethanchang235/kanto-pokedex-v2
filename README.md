@@ -2,6 +2,8 @@
 
 A simple, interactive web application displaying information about the first 151 Pokémon (Generation 1 - Kanto region).
 
+Inspired by this tweet, tried recreating: https://x.com/Teknium1/status/1913665661659971589
+
 ## Description
 
 This project provides a grid view of the Kanto Pokémon. Clicking on a Pokémon card opens a modal window showing more detailed information, including its sprite, number, types, height, weight, a brief description, and base stats.
