@@ -2,7 +2,7 @@
 
 A simple, interactive web application displaying information about the first 151 Pokémon (Generation 1 - Kanto region).
 
-Inspired by this tweet, tried recreating: https://x.com/Teknium1/status/1913665661659971589
+Inspired by this tweet, tried recreating by hand: https://x.com/Teknium1/status/1913665661659971589
 
 ## Description
 
