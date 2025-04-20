@@ -4,6 +4,8 @@ A simple, interactive web application displaying information about the first 151
 
 Inspired by this tweet, tried recreating by hand: https://x.com/Teknium1/status/1913665661659971589
 
+Still working on getting the Pokemon to be animated, but have added various features of my own (e.g. weaknesses against certain types)
+
 ## Description
 
 This project provides a grid view of the Kanto Pokémon. Clicking on a Pokémon card opens a modal window showing more detailed information, including its sprite, number, types, height, weight, a brief description, and base stats.
