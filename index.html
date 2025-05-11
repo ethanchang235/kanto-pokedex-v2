@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex - Kanto Region</title>
+    <title>Pokédex</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 <body>
     <header>
         <h1>Pokédex</h1>
-        <p>First 151 Pokémon (Gen 1)</p>
+        <p>All Generations</p>
     </header>
 
     <main>
@@ -25,6 +25,13 @@
                 <button class="type-filter-button active" data-type="all">All</button>
                 <!-- Type filter buttons inserted here -->
             </div>
+
+            <!-- Generation Filters -->
+            <div id="generation-filter-container" class="generation-filter-container">
+                <button class="generation-filter-button active" data-generation="all">All Gens</button>
+                <!-- Generation filter buttons will be inserted here by JavaScript -->
+            </div>
+
              <!-- Sorting Dropdown -->
             <div class="sort-container">
                  <label for="sort-select">Sort by:</label>
