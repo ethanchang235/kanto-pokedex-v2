@@ -9,11 +9,12 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #f0f0f0;
     color: #333;
+    line-height: 1.6;
 }
 
 /* Header */
 header {
-    background-color: #ef5350; /* Orange/Red like the image */
+    background-color: #ef5350;
     color: white;
     padding: 15px 30px;
     text-align: center;
@@ -26,17 +27,17 @@ header h1 {
 
 header p {
     font-size: 0.9em;
-    color: #ffebee; /* Lighter shade for subtitle */
+    color: #ffebee;
 }
 
-/* Main Content & Grid */
+/* Main Content */
 main {
     padding: 20px;
     max-width: 1200px;
     margin: 20px auto;
 }
 
-/* Filter Controls Container */
+/* Filter Controls Overall Container */
 .filter-controls {
     margin-bottom: 25px;
     padding: 20px;
@@ -44,897 +45,27 @@ main {
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     display: flex;
-    flex-direction: column; /* Stack filter groups vertically */
-    gap: 20px; /* Increased gap between filter groups */
+    flex-direction: column; /* Stack main filter groups vertically */
+    gap: 15px; /* Space between main filter groups */
 }
 
-/* Search Container (for the original name/ID search) */
-.search-container {
-     text-align: center; /* Center the input within its container */
- }
-#search-input {
-    padding: 10px 15px;
-    width: 100%; /* Make it take more width */
-    max-width: 600px; /* But not too wide on large screens */
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 1em;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin: 0 auto; /* Center the input field itself if width < max-width */
-    display: block; /* Ensure margin auto works */
-}
-
-/* Semantic Search Styles */
-.semantic-search-container {
-    display: flex;
-    gap: 10px;
-    justify-content: center; /* Center content within this container */
-    align-items: center;
-    width: 100%; /* Take full width of its column */
-}
-
-#semantic-search-input {
-    flex-grow: 1; /* Allow input to take available space */
-    max-width: 500px; /* Limit its max width */
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 1em;
-}
-
-#semantic-search-button {
-    padding: 10px 18px; /* Slightly more padding */
-    background-color: #4CAF50; /* A different, appealing color for action */
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.95em;
-    font-weight: bold;
-    transition: background-color 0.2s, transform 0.1s;
-    white-space: nowrap; /* Prevent text wrapping */
-}
-#semantic-search-button:hover {
-    background-color: #45a049; /* Darker shade on hover */
-    transform: translateY(-1px);
-}
-#semantic-search-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transform: translateY(0);
-}
-
-
-/* Type Filter Container - already good with flex-wrap */
-.type-filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    /* margin-bottom: 15px; /* Spacing handled by .filter-controls gap */
-}
-/* Type filter button styles remain largely the same, ensure they are visually distinct */
-
-
-/* Generation Filter Container - already good with flex-wrap */
-.generation-filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    /* margin-top: 15px; /* Spacing handled by .filter-controls gap */
-}
-/* Generation filter button styles remain largely the same */
-
-
-/* Sort Container - center it */
-.sort-container {
-    text-align: center;
-    /* margin-top: 20px; /* Spacing handled by .filter-controls gap */
-}
-.sort-container label {
-    margin-right: 10px;
-    font-size: 0.95em;
-    color: #555;
-    font-weight: bold;
-}
-#sort-select {
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 0.9em;
-    background-color: white; /* Ensure it's not transparent */
-}
-
-/* Optional: Add a subtle title/divider for filter sections if desired */
-.filter-group-title {
-    text-align: center;
-    font-size: 0.9em;
-    color: #777;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-
-.pokedex-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
-}
-
-#loading-message {
-    grid-column: 1 / -1; /* Span across all columns */
-    text-align: center;
-    font-size: 1.2em;
-    padding: 40px;
-    color: #666;
-}
-
-.pokemon-card {
-    background-color: white;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #eee;
-}
-
-.pokemon-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.pokemon-card img {
-    width: 96px; /* Standard sprite size */
-    height: 96px;
-    margin-bottom: 10px;
-    image-rendering: pixelated; /* Keep sprites crisp */
-}
-
-.pokemon-card h3 {
-    font-size: 1em;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-}
-
-.pokemon-card p {
-    font-size: 0.85em;
-    color: #777;
-}
-
-/* Modal Styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: auto;
-    padding: 30px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 450px;
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-}
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #ef5350; /* Match header color on hover */
-    text-decoration: none;
-}
-
-.modal-content h2 {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    text-transform: capitalize;
-    font-size: 1.8em;
-}
-
-.modal-content #modal-pokemon-number {
-    color: #888;
-    font-size: 1em;
-    margin-bottom: 15px;
-}
-
-.modal-content img {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 15px;
-    image-rendering: pixelated; /* Keep sprites crisp */
-}
-
-.types-container {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.type-badge {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 15px;
-    color: white;
-    font-size: 0.9em;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-}
-
-/* Specific Type Colors (add more as needed) */
-.type-normal { background-color: #A8A77A; }
-.type-fire { background-color: #EE8130; }
-.type-water { background-color: #6390F0; }
-.type-electric { background-color: #F7D02C; }
-.type-grass { background-color: #7AC74C; }
-.type-ice { background-color: #96D9D6; }
-.type-fighting { background-color: #C22E28; }
-.type-poison { background-color: #A33EA1; }
-.type-ground { background-color: #E2BF65; }
-.type-flying { background-color: #A98FF3; }
-.type-psychic { background-color: #F95587; }
-.type-bug { background-color: #A6B91A; }
-.type-rock { background-color: #B6A136; }
-.type-ghost { background-color: #735797; }
-.type-dragon { background-color: #6F35FC; }
-.type-dark { background-color: #705746; }
-.type-steel { background-color: #B7B7CE; }
-.type-fairy { background-color: #D685AD; }
-
-
-.pokemon-details {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 15px;
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.pokemon-details p {
-    font-size: 0.9em;
-    color: #555;
-}
-.pokemon-details strong {
-    color: #333;
-}
-
-#modal-pokemon-description-container {
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #fff9c4; /* Light yellow background */
-    border-left: 4px solid #fdd835; /* Yellow border */
-    border-radius: 4px;
-    text-align: left;
-}
-
-#modal-pokemon-description {
-    font-size: 0.9em;
-    color: #5f4339;
-    line-height: 1.4;
-}
-
-.modal-content h3 {
-    margin-bottom: 10px;
-    text-align: left;
-    font-size: 1.2em;
-}
-
-.stats-container {
-    text-align: left;
-}
-
-.stat-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    position: relative; /* For tooltip */
-}
-
-.stat-label {
-    width: 80px; /* Adjust as needed */
-    font-size: 0.85em;
-    color: #666;
-    text-transform: capitalize;
-    padding-right: 10px;
-    text-align: right;
-}
-
-.stat-bar-container {
-    flex-grow: 1;
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    height: 15px;
-    overflow: hidden; /* Ensure inner bar stays within bounds */
-    position: relative;
-}
-
-.stat-bar {
-    height: 100%;
-    background-color: #4CAF50; /* Default color, will be overridden */
-    border-radius: 10px 0 0 10px; /* Round left corners */
-    transition: width 0.8s ease-out;
-    width: 0%; /* Start at 0, JS will set width */
-    position: relative; /* For tooltip positioning */
-}
-.stat-value-tooltip {
-    display: none; /* Hidden by default */
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.8em;
-    white-space: nowrap;
-    z-index: 10; /* Ensure tooltip is above the bar */
-}
-
-.stat-row:hover .stat-value-tooltip {
-    display: block; /* Show on hover */
-}
-
-/* Stat specific colors */
-.stat-hp .stat-bar { background-color: #FF5959; }
-.stat-attack .stat-bar { background-color: #F5AC78; }
-.stat-defense .stat-bar { background-color: #FAE078; }
-.stat-special-attack .stat-bar { background-color: #9DB7F5; }
-.stat-special-defense .stat-bar { background-color: #A7DB8D; }
-.stat-speed .stat-bar { background-color: #FA92B2; }
-
-/* === Existing styles remain the same === */
-
-/* Search Bar */
-.search-container {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#search-input {
-    padding: 10px 15px;
-    width: 80%;
-    max-width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 1em;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-#search-input:focus {
-    outline: none;
-    border-color: #ef5350;
-    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
-}
-
-/* Modal Header Flex for Shiny Toggle */
-.modal-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 5px;
-}
-
-/* Shiny Toggle Button */
-#shiny-toggle {
-    background: none;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-#shiny-toggle:hover {
-    background-color: #f0f0f0;
-    border-color: #aaa;
-}
-
-#shiny-toggle.active {
-    background-color: #ffd700; /* Gold background when shiny is active */
-    border-color: #e6c200;
-}
-
-
-/* Evolution Chain */
-.evolution-chain-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-    flex-wrap: wrap; /* Allow wrapping if chain is long */
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-}
-
-.evolution-stage {
-    text-align: center;
-    cursor: pointer; /* Make stages clickable */
-    padding: 5px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-.evolution-stage:hover {
-    background-color: #eee;
-}
-
-.evolution-stage img {
-    width: 70px;
-    height: 70px;
-    display: block;
-    margin: 0 auto 5px auto;
-    image-rendering: pixelated;
-}
-
-.evolution-stage span {
-    font-size: 0.9em;
-    text-transform: capitalize;
-    display: block;
-    color: #555;
-}
-
-.evolution-arrow {
-    font-size: 1.5em;
-    color: #aaa;
-    align-self: center; /* Center arrow vertically */
-}
-
-#evolution-loading {
-    font-style: italic;
-    color: #888;
-}
-
-/* Search Bar */
-.search-container {
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#search-input {
-    padding: 10px 15px;
-    width: 80%;
-    max-width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    font-size: 1em;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-#search-input:focus {
-    outline: none;
-    border-color: #ef5350;
-    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
-}
-
-/* Modal Header Flex for Shiny Toggle */
-.modal-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 5px;
-}
-
-/* Shiny Toggle */
-#shiny-toggle {
-    background: none;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0;
-    line-height: 1;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-#shiny-toggle:hover {
-    background-color: #f0f0f0;
-    border-color: #aaa;
-}
-
-#shiny-toggle.active {
-    background-color: #ffd700; /* Gold background when shiny is active */
-    border-color: #e6c200;
-}
-
-/* Evolution Chain */
-.evolution-chain-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-    flex-wrap: wrap; /* Allow wrapping if chain is long */
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-}
-
-.evolution-stage {
-    text-align: center;
-    cursor: pointer; /* Make stages clickable */
-    padding: 5px;
-    border-radius: 5px;
-    transition: background-color 0.2s;
-}
-
-.evolution-stage:hover {
-    background-color: #eee;
-}
-
-.evolution-stage img {
-    width: 70px;
-    height: 70px;
-    display: block;
-    margin: 0 auto 5px auto;
-    image-rendering: pixelated;
-}
-
-.evolution-stage span {
-    font-size: 0.9em;
-    text-transform: capitalize;
-    display: block;
-    color: #555;
-}
-
-.evolution-arrow {
-    font-size: 1.5em;
-    color: #aaa;
-    align-self: center; /* Center arrow vertically */
-}
-
-#evolution-loading {
-    font-style: italic;
-    color: #888;
-}
-
-/* Type Filter Container */
-.type-filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px; /* Keep the gap */
-}
-
-/* --- UPDATED Type Filter Button Styling --- */
-.type-filter-button {
-    /* Inherit base badge styles */
-    display: inline-block;
-    padding: 5px 15px; /* Match modal badges */
-    border-radius: 15px; /* Match modal badges */
-    color: white;
-    font-size: 0.9em; /* Match modal badges */
-    font-weight: bold; /* Match modal badges */
-    text-transform: capitalize; /* Consistent capitalization */
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2); /* Match modal badges */
-    border: none; /* Remove default border */
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-}
-
-/* Apply type-specific colors directly */
-.type-filter-button.type-normal { background-color: #A8A77A; }
-.type-filter-button.type-fire { background-color: #EE8130; }
-.type-filter-button.type-water { background-color: #6390F0; }
-.type-filter-button.type-electric { background-color: #F7D02C; }
-.type-filter-button.type-grass { background-color: #7AC74C; }
-.type-filter-button.type-ice { background-color: #96D9D6; }
-.type-filter-button.type-fighting { background-color: #C22E28; }
-.type-filter-button.type-poison { background-color: #A33EA1; }
-.type-filter-button.type-ground { background-color: #E2BF65; }
-.type-filter-button.type-flying { background-color: #A98FF3; }
-.type-filter-button.type-psychic { background-color: #F95587; }
-.type-filter-button.type-bug { background-color: #A6B91A; }
-.type-filter-button.type-rock { background-color: #B6A136; }
-.type-filter-button.type-ghost { background-color: #735797; }
-.type-filter-button.type-dragon { background-color: #6F35FC; }
-.type-filter-button.type-steel { background-color: #B7B7CE; }
-.type-filter-button.type-dark { background-color: #705746; }
-.type-filter-button.type-fairy { background-color: #D685AD; }
-
-/* Special style for the 'All' button */
-.type-filter-button[data-type="all"] {
-    background-color: #68A090; /* Neutral Teal */
-}
-
-/* Indicate non-active buttons with opacity */
-.type-filter-button:not(.active) {
-    opacity: 0.65;
-}
-
-.type-filter-button.active {
-    opacity: 1;
-    transform: scale(1.05); /* Slightly enlarge active button */
-}
-
-.type-filter-button:hover:not(.active) {
-     opacity: 0.85; /* Increase opacity slightly on hover for inactive */
-}
-
-/* --- Add Sorting Dropdown Styles --- */
-.sort-container {
-    margin-top: 15px; /* Space above sort */
-    text-align: center;
-}
-
-.sort-container label {
-    margin-right: 8px;
-    font-size: 0.9em;
-    color: #555;
-}
-
-#sort-select {
-    padding: 8px 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 0.9em;
-}
-
-/* --- Add Pagination Styles --- */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 30px; /* Space above pagination */
-    margin-bottom: 10px; /* Space below pagination */
-}
-
-.pagination-button {
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.9em;
-}
-
-.pagination-button:hover:not(:disabled) {
-    background-color: #f0f0f0;
-}
-
-.pagination-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    background-color: #eee;
-}
-
-#page-info {
-    font-size: 0.9em;
-    color: #555;
-    margin: 0 10px;
-}
-
-/* Type Filter Container */
-.type-filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px; /* Keep the gap */
-}
-
-/* --- UPDATED Type Filter Button Styling --- */
-.type-filter-button {
-    /* Inherit base badge styles */
-    display: inline-block;
-    padding: 5px 15px; /* Match modal badges */
-    border-radius: 15px; /* Match modal badges */
-    color: white;
-    font-size: 0.9em; /* Match modal badges */
-    font-weight: bold; /* Match modal badges */
-    text-transform: capitalize; /* Consistent capitalization */
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2); /* Match modal badges */
-    border: none; /* Remove default border */
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.2s;
-}
-
-/* Apply type-specific colors directly */
-.type-filter-button.type-normal { background-color: #A8A77A; }
-.type-filter-button.type-fire { background-color: #EE8130; }
-.type-filter-button.type-water { background-color: #6390F0; }
-.type-filter-button.type-electric { background-color: #F7D02C; }
-.type-filter-button.type-grass { background-color: #7AC74C; }
-.type-filter-button.type-ice { background-color: #96D9D6; }
-.type-filter-button.type-fighting { background-color: #C22E28; }
-.type-filter-button.type-poison { background-color: #A33EA1; }
-.type-filter-button.type-ground { background-color: #E2BF65; }
-.type-filter-button.type-flying { background-color: #A98FF3; }
-.type-filter-button.type-psychic { background-color: #F95587; }
-.type-filter-button.type-bug { background-color: #A6B91A; }
-.type-filter-button.type-rock { background-color: #B6A136; }
-.type-filter-button.type-ghost { background-color: #735797; }
-.type-filter-button.type-dragon { background-color: #6F35FC; }
-.type-filter-button.type-steel { background-color: #B7B7CE; }
-.type-filter-button.type-dark { background-color: #705746; }
-.type-filter-button.type-fairy { background-color: #D685AD; }
-
-/* Special style for the 'All' button */
-.type-filter-button[data-type="all"] {
-    background-color: #68A090; /* Neutral Teal */
-}
-
-/* Indicate non-active buttons with opacity */
-.type-filter-button:not(.active) {
-    opacity: 0.65;
-}
-
-.type-filter-button.active {
-    opacity: 1;
-    transform: scale(1.05); /* Slightly enlarge active button */
-}
-
-.type-filter-button:hover:not(.active) {
-     opacity: 0.85; /* Increase opacity slightly on hover for inactive */
-}
-
-/* --- Add Sorting Dropdown Styles --- */
-.sort-container {
-    margin-top: 15px; /* Space above sort */
-    text-align: center;
-}
-
-.sort-container label {
-    margin-right: 8px;
-    font-size: 0.9em;
-    color: #555;
-}
-
-#sort-select {
-    padding: 8px 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 0.9em;
-}
-
-/* --- Add Pagination Styles --- */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 30px; /* Space above pagination */
-    margin-bottom: 10px; /* Space below pagination */
-}
-
-.pagination-button {
-    padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.9em;
-}
-
-.pagination-button:hover:not(:disabled) {
-    background-color: #f0f0f0;
-}
-
-.pagination-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    background-color: #eee;
-}
-
-#page-info {
-    font-size: 0.9em;
-    color: #555;
-    margin: 0 10px;
-}
-
-/* Styles for Generation Filter Container */
-.generation-filter-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 15px; /* Space below type filters */
-}
-
-.generation-filter-button {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 0.85em;
-    background-color: #e9e9e9; /* Slightly different base for gens */
-    color: #444;
-    transition: opacity 0.2s, transform 0.2s, background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
-    text-transform: capitalize;
-}
-
-.generation-filter-button:not(.active) {
-    opacity: 0.7;
-}
-
-.generation-filter-button:hover:not(.active) {
-    opacity: 0.9;
-    background-color: #dcdcdc;
-}
-
-.generation-filter-button.active {
-    background-color: #5C7CFA; /* A distinct color for active generation */
-    color: white;
-    font-weight: bold;
-    border-color: transparent;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-/* Ensure modal loading placeholders are styled (if not already) */
-#evolution-loading, #effectiveness-loading {
-    text-align: center;
-    color: #888;
-    font-style: italic;
-    padding: 10px 0; /* Add some padding for visibility */
-}
-
-/* Filter Controls Container - ensure it allows children to stretch if needed */
-.filter-controls {
-    margin-bottom: 25px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* New Wrapper for Search Bars - This is key for alignment */
+/* Wrapper for both search inputs/bars */
 .search-bars-container {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping to new line on smaller screens */
-    gap: 15px;       /* Space between the two search groups */
-    align-items: center; /* Vertically align items if they have different heights */
+    flex-direction: column; /* Stack the two search bars vertically */
+    gap: 10px;
+    width: 100%;
 }
 
-/* Container for the original name search */
+/* Container for the original name/ID search input */
 .search-container {
-    flex: 1 1 300px; /* Grow, shrink, base width 300px. Allows it to take more space. */
-    display: flex; /* To make its child input take full width */
+    display: flex; /* Allows input to take full width easily */
+    width: 100%;
 }
 #search-input {
-    width: 100%; /* Take full width of its .search-container parent */
+    width: 100%;
+    max-width: 700px; /* Optional: Limit max width, centers due to margin: auto below */
+    margin: 0 auto; /* Centers the input if max-width is applied */
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -943,26 +74,24 @@ main {
 }
 #search-input:focus {
     outline: none;
-    border-color: #ef5350; /* Or your preferred focus color */
+    border-color: #ef5350;
     box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
 }
 
-/* Container for the semantic search input and button */
+/* Container for semantic search input and button */
 .semantic-search-container {
-    flex: 1 1 350px; /* Grow, shrink, slightly larger base width due to button */
     display: flex;
     gap: 10px;
-    align-items: center; /* Align input and button vertically */
+    align-items: center;
+    width: 100%;
 }
-
 #semantic-search-input {
-    flex-grow: 1; /* Input takes available space within this container */
+    flex-grow: 1; /* Input takes available space */
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 20px;
     font-size: 1em;
 }
-
 #semantic-search-button {
     padding: 10px 18px;
     background-color: #4CAF50;
@@ -985,57 +114,359 @@ main {
     transform: translateY(0);
 }
 
-/* Titles for filter groups - keep as is or adjust margins if needed */
+/* Titles for filter groups (e.g., "FILTER BY TYPE") */
 .filter-group-title {
     text-align: center;
     font-size: 0.85em;
     color: #666;
     margin-bottom: 8px;
-    margin-top: 5px; /* Add a little space above titles if search bars wrap */
+    margin-top: 10px; /* Space above title if there are elements before it */
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
 }
 
-/* Optional titles for filter groups - make them smaller */
-.filter-group-title {
-    text-align: center;
-    font-size: 0.85em; /* Smaller */
-    color: #666;    /* Lighter */
-    margin-bottom: 8px; /* Less margin */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600; /* Slightly bolder if you want to keep them clear */
+/* Type Filter Buttons Container */
+.type-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
+.type-filter-button {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 15px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: capitalize;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+/* Type-specific colors for filter buttons */
+.type-filter-button.type-normal { background-color: #A8A77A; }
+.type-filter-button.type-fire { background-color: #EE8130; }
+.type-filter-button.type-water { background-color: #6390F0; }
+.type-filter-button.type-electric { background-color: #F7D02C; }
+.type-filter-button.type-grass { background-color: #7AC74C; }
+.type-filter-button.type-ice { background-color: #96D9D6; }
+.type-filter-button.type-fighting { background-color: #C22E28; }
+.type-filter-button.type-poison { background-color: #A33EA1; }
+.type-filter-button.type-ground { background-color: #E2BF65; }
+.type-filter-button.type-flying { background-color: #A98FF3; }
+.type-filter-button.type-psychic { background-color: #F95587; }
+.type-filter-button.type-bug { background-color: #A6B91A; }
+.type-filter-button.type-rock { background-color: #B6A136; }
+.type-filter-button.type-ghost { background-color: #735797; }
+.type-filter-button.type-dragon { background-color: #6F35FC; }
+.type-filter-button.type-steel { background-color: #B7B7CE; }
+.type-filter-button.type-dark { background-color: #705746; }
+.type-filter-button.type-fairy { background-color: #D685AD; }
+.type-filter-button[data-type="all"] { background-color: #68A090; } /* 'All Types' button */
 
-/* Type and Generation Filter Containers */
-.type-filter-container, .generation-filter-container {
-    /* margin-top: 10px; /* Reduced margin if titles are used */
-    /* gap: 6px; /* Slightly smaller gap between buttons */
+.type-filter-button:not(.active) { opacity: 0.65; }
+.type-filter-button.active { opacity: 1; transform: scale(1.05); }
+.type-filter-button:hover:not(.active) { opacity: 0.85; }
+
+/* Generation Filter Buttons Container */
+.generation-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+.generation-filter-button {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.85em;
+    background-color: #e9e9e9;
+    color: #444;
+    transition: opacity 0.2s, transform 0.2s, background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    text-transform: capitalize; /* Handles "Gen I" correctly */
+}
+.generation-filter-button:not(.active) { opacity: 0.7; }
+.generation-filter-button:hover:not(.active) { opacity: 0.9; background-color: #dcdcdc; }
+.generation-filter-button.active {
+    background-color: #5C7CFA;
+    color: white;
+    font-weight: bold;
+    border-color: transparent;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    opacity: 1;
+    transform: scale(1.05);
 }
 
 /* Sort Container */
 .sort-container {
     text-align: center;
-    margin-top: 5px; /* Reduced top margin */
+    margin-top: 10px; /* Adjusted from 5px for a bit more space */
 }
 .sort-container label {
-    margin-right: 8px; /* Keep this for spacing */
+    margin-right: 8px;
+    font-size: 0.95em;
+    color: #555;
+    font-weight: bold;
+}
+#sort-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+    background-color: white;
 }
 
-@media (min-width: 768px) {
-    .search-bars-container {
-        flex-direction: row; /* Side-by-side on wider screens */
-        align-items: center; /* Align items vertically */
-    }
-    .search-container {
-        flex-grow: 1; /* Allow original search to take more space */
-    }
-    #search-input {
-        max-width: none; /* Allow it to fill its flex space */
-    }
-    .semantic-search-container {
-        flex-grow: 1; /* Allow semantic search to take space */
-        max-width: 50%; /* Example: limit semantic search part */
-    }
+/* Pokedex Grid */
+.pokedex-grid {
+    margin-top: 20px; /* Space below filter controls */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+#loading-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 40px;
+    color: #666;
+}
+
+/* Pokémon Card */
+.pokemon-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    position: relative;
+}
+.pokemon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.pokemon-card img {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 10px;
+    image-rendering: pixelated;
+}
+.pokemon-card h3 {
+    font-size: 1em;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pokemon-card p {
+    font-size: 0.85em;
+    color: #777;
+}
+.pokemon-card .favorite-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.3em;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    padding: 2px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+.pokemon-card.favorite-card { /* Optional: visual cue for favorited cards */
+    /* border-left: 4px solid #FFD700; */
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+.pagination-button {
+    padding: 8px 15px; border: 1px solid #ccc; border-radius: 5px;
+    background-color: #fff; cursor: pointer; transition: background-color 0.2s; font-size: 0.9em;
+}
+.pagination-button:hover:not(:disabled) { background-color: #f0f0f0; }
+.pagination-button:disabled { cursor: not-allowed; opacity: 0.5; background-color: #eee; }
+#page-info { font-size: 0.9em; color: #555; margin: 0 10px; }
+
+/* Modal Styling */
+.modal {
+    display: none; position: fixed; z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    overflow: auto; background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center; align-items: center;
+}
+.modal-content {
+    background-color: #fff; margin: auto; padding: 30px;
+    border-radius: 10px; width: 90%; max-width: 500px; /* Adjusted max-width */
+    position: relative; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+.close-button {
+    position: absolute; top: 10px; right: 15px;
+    color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer;
+}
+.close-button:hover, .close-button:focus { color: #ef5350; text-decoration: none; }
+
+.modal-header {
+    display: flex; justify-content: center; align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.modal-header h2 { margin: 0; text-transform: capitalize; font-size: 1.8em; }
+.modal-header-buttons { display: flex; gap: 10px; align-items: center; }
+
+#shiny-toggle {
+    background: none; border: 1px solid #ccc; border-radius: 50%;
+    width: 30px; height: 30px; font-size: 1.2em; cursor: pointer;
+    padding: 0; line-height: 1; transition: background-color 0.2s, border-color 0.2s;
+}
+#shiny-toggle:hover { background-color: #f0f0f0; border-color: #aaa; }
+#shiny-toggle.active { background-color: #ffd700; border-color: #e6c200; }
+
+.favorite-button { /* Base style for modal and card star */
+    background: none; border: none; font-size: 1.6em; cursor: pointer;
+    padding: 0; line-height: 1; color: #ccc; transition: color 0.2s, transform 0.2s;
+}
+.favorite-button:hover { transform: scale(1.1); }
+.favorite-button.active { color: #FFD700; }
+
+.modal-content #modal-pokemon-number { color: #888; font-size: 1em; margin-bottom: 15px; }
+.modal-content img#modal-pokemon-sprite {
+    width: 120px; height: 120px; margin-bottom: 15px; image-rendering: pixelated;
+    border: 1px solid #eee; border-radius: 50%; background-color: #f9f9f9; padding: 5px;
+}
+
+.types-container {
+    margin-bottom: 15px; display: flex; justify-content: center; gap: 10px;
+}
+.type-badge {
+    display: inline-block; padding: 5px 15px; border-radius: 15px;
+    color: white; font-size: 0.9em; font-weight: bold;
+    text-transform: uppercase; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+/* Specific Type Colors for modal badges */
+.type-badge.type-normal { background-color: #A8A77A; }
+.type-badge.type-fire { background-color: #EE8130; }
+.type-badge.type-water { background-color: #6390F0; }
+.type-badge.type-electric { background-color: #F7D02C; }
+.type-badge.type-grass { background-color: #7AC74C; }
+.type-badge.type-ice { background-color: #96D9D6; }
+.type-badge.type-fighting { background-color: #C22E28; }
+.type-badge.type-poison { background-color: #A33EA1; }
+.type-badge.type-ground { background-color: #E2BF65; }
+.type-badge.type-flying { background-color: #A98FF3; }
+.type-badge.type-psychic { background-color: #F95587; }
+.type-badge.type-bug { background-color: #A6B91A; }
+.type-badge.type-rock { background-color: #B6A136; }
+.type-badge.type-ghost { background-color: #735797; }
+.type-badge.type-dragon { background-color: #6F35FC; }
+.type-badge.type-dark { background-color: #705746; }
+.type-badge.type-steel { background-color: #B7B7CE; }
+.type-badge.type-fairy { background-color: #D685AD; }
+
+.pokemon-details {
+    display: flex; justify-content: space-around; margin-bottom: 15px;
+    background-color: #f9f9f9; padding: 10px; border-radius: 5px;
+}
+.pokemon-details p { font-size: 0.9em; color: #555; }
+.pokemon-details strong { color: #333; }
+
+#modal-pokemon-description-container {
+    margin-bottom: 20px; padding: 10px 15px; background-color: #fff9c4;
+    border-left: 4px solid #fdd835; border-radius: 4px; text-align: left;
+}
+#modal-pokemon-description { font-size: 0.9em; color: #5f4339; line-height: 1.4; }
+
+.modal-content h3 {
+    margin-top: 20px; margin-bottom: 10px;
+    text-align: left; font-size: 1.2em;
+    border-bottom: 1px solid #eee; padding-bottom: 5px;
+}
+
+.stats-container { text-align: left; }
+.stat-row { display: flex; align-items: center; margin-bottom: 8px; position: relative; }
+.stat-label {
+    width: 80px; font-size: 0.85em; color: #666;
+    text-transform: capitalize; padding-right: 10px; text-align: right;
+}
+.stat-bar-container {
+    flex-grow: 1; background-color: #e0e0e0; border-radius: 10px;
+    height: 15px; overflow: hidden; position: relative;
+}
+.stat-bar {
+    height: 100%; border-radius: 10px 0 0 10px;
+    transition: width 0.8s ease-out; width: 0%; position: relative;
+}
+.stat-value-tooltip {
+    display: none; position: absolute; right: 5px; top: 50%;
+    transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.7);
+    color: white; padding: 2px 6px; border-radius: 3px;
+    font-size: 0.8em; white-space: nowrap; z-index: 10;
+}
+.stat-row:hover .stat-value-tooltip { display: block; }
+
+.stat-hp .stat-bar { background-color: #FF5959; }
+.stat-attack .stat-bar { background-color: #F5AC78; }
+.stat-defense .stat-bar { background-color: #FAE078; }
+.stat-special-attack .stat-bar { background-color: #9DB7F5; }
+.stat-special-defense .stat-bar { background-color: #A7DB8D; }
+.stat-speed .stat-bar { background-color: #FA92B2; }
+
+/* Evolution Chain */
+.evolution-chain-container {
+    display: flex; justify-content: center; align-items: center;
+    gap: 15px; margin-top: 10px; flex-wrap: wrap;
+    padding: 10px; background-color: #f9f9f9; border-radius: 8px; min-height: 80px;
+}
+.evolution-stage {
+    text-align: center; cursor: pointer; padding: 5px;
+    border-radius: 5px; transition: background-color 0.2s;
+}
+.evolution-stage:hover { background-color: #eee; }
+.evolution-stage img {
+    width: 70px; height: 70px; display: block;
+    margin: 0 auto 5px auto; image-rendering: pixelated;
+}
+.evolution-stage span { font-size: 0.9em; text-transform: capitalize; display: block; color: #555; }
+.evolution-arrow { font-size: 1.5em; color: #aaa; align-self: center; }
+
+/* Type Effectiveness */
+.type-effectiveness-container {
+    margin-top: 10px; padding: 15px;
+    background-color: #f9f9f9; border-radius: 8px; text-align: left; min-height: 80px;
+}
+.type-effectiveness-container h4 {
+    font-size: 0.95em; margin-bottom: 8px; margin-top: 5px;
+    color: #444; border-bottom: 1px solid #eee; padding-bottom: 3px;
+}
+.type-effectiveness-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-wrap: wrap; gap: 5px;
+}
+.type-effectiveness-list li { margin-bottom: 5px; }
+
+/* Ensure modal loading placeholders are styled */
+#evolution-loading, #effectiveness-loading {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 10px 0;
+    width: 100%; /* Make sure it takes full width to center text */
 }

@@ -1,10 +1,8 @@
 # Kanto Pokédex
 
-A simple, interactive web application displaying information about the first 151 Pokémon (Generation 1 - Kanto region).
+A simple, interactive web application displaying information about the Pokémon from Generations I-IX.
 
-Inspired by this tweet, tried recreating by hand: https://x.com/Teknium1/status/1913665661659971589
-
-Still working on getting the Pokemon to be animated, but have added various features of my own (e.g. weaknesses against certain types)
+Still working on getting the Pokemon to be animated, but have added various features of my own (e.g. weaknesses against certain types, semantic search)
 
 ## Description
 
@@ -12,7 +10,7 @@ This project provides a grid view of the Kanto Pokémon. Clicking on a Pokémon 
 
 ## Features
 
-*   Displays the first 151 Pokémon in a responsive grid.
+*   Displays Pokémon in a responsive 7x7 grid.
 *   Clickable Pokémon cards to view details.
 *   Modal view showing:
     *   Official Sprite
@@ -49,5 +47,7 @@ To run this project locally, follow these steps:
     *   Alternatively, you can simply open the `index.html` file directly in your web browser, but live reloading won't work.
 
 ## Data Source
+
+Inspired by this tweet, tried recreating by hand: https://x.com/Teknium1/status/1913665661659971589
 
 All Pokémon data and sprites are retrieved from the free and open [PokeAPI](https://pokeapi.co/). 
