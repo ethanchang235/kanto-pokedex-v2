@@ -32,7 +32,7 @@ const semanticSearchButton = document.getElementById('semantic-search-button'); 
 // === Constants ===
 const ITEMS_PER_PAGE = 49; // Number of Pokémon per page
 const ALL_POKEMON_DATA_URL = 'data/all_pokemon_summary.json'; // Path to pre-built JSON
-const GEMINI_API_KEY = 'AIzaSyA5M3hEzJza5EKl52Uaqw2wMeT1fWeRCVw'; // <<<<< ONLY FOR LOCAL TESTING
+const GEMINI_API_KEY = ''; // <<<<< ONLY FOR LOCAL TESTING
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
 
