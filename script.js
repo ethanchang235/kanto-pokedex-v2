@@ -26,10 +26,15 @@ const evolutionContainer = document.getElementById('modal-evolution-chain');
 const evolutionLoading = document.getElementById('evolution-loading');
 const typeEffectivenessContainer = document.getElementById('modal-type-effectiveness');
 const effectivenessLoading = document.getElementById('effectiveness-loading');
+const semanticSearchInput = document.getElementById('semantic-search-input'); // semantic-search
+const semanticSearchButton = document.getElementById('semantic-search-button'); // semantic-search
 
 // === Constants ===
 const ITEMS_PER_PAGE = 20; // Number of Pokémon per page
-const ALL_POKEMON_DATA_URL = 'data/all_pokemon_summary.json'; // Path to your pre-built JSON
+const ALL_POKEMON_DATA_URL = 'data/all_pokemon_summary.json'; // Path to pre-built JSON
+const GEMINI_API_KEY = 'AIzaSyA5M3hEzJza5EKl52Uaqw2wMeT1fWeRCVw'; // <<<<< ONLY FOR LOCAL TESTING
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
 
 // API URLs for detailed modal data (when a card is clicked)
 const POKEAPI_POKEMON_URL = 'https://pokeapi.co/api/v2/pokemon/';
@@ -77,6 +82,97 @@ const fetchDetailPokemonData = (idOrName) => fetchLiveApiData(`${POKEAPI_POKEMON
 const fetchSpeciesData = (idOrName) => fetchLiveApiData(`${POKEAPI_SPECIES_URL}${String(idOrName).toLowerCase()}`, speciesCache);
 const fetchEvolutionChain = (chainId) => chainId ? fetchLiveApiData(`${POKEAPI_EVOLUTION_URL}${chainId}`, evolutionCache) : null;
 const fetchTypeData = (typeName) => fetchLiveApiData(`${POKEAPI_TYPE_URL}${typeName}`, typeDataCache);
+
+// --- Gemini API Call ---
+async function fetchSemanticSuggestions(query) {
+    semanticSearchButton.disabled = true;
+    semanticSearchButton.textContent = 'Thinking...';
+    loadingMessage.textContent = 'Getting semantic suggestions...';
+    loadingMessage.style.display = 'block';
+
+    // --- Prompt Engineering: ---
+    // Ask Gemini to extract types and keywords from the user's query.
+    // This prompt structure is an example and might need refinement.
+    const prompt = `
+        User query for Pokémon: "${query}"
+
+        Based on this query, extract the following information to help filter a Pokémon database:
+        1. Relevant Pokémon Types (e.g., fire, water, grass, psychic, dark, steel). List up to two types.
+        2. Descriptive Keywords (e.g., strong, fast, small, legendary, swims, flies, red, shiny). List up to five keywords.
+
+        Format your response clearly, for example:
+        TYPES: water, flying
+        KEYWORDS: large, bird, ocean, fast
+
+        If no specific types or keywords can be confidently extracted, state "TYPES: none" or "KEYWORDS: none".
+    `;
+
+    try {
+        if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
+            console.error("Gemini API Key not set. Please replace 'YOUR_GEMINI_API_KEY' in script.js for local testing.");
+            alert("Gemini API Key not configured for local testing. See console.");
+            // Simulate a response for UI testing without actual API call
+            return { types: [], keywords: ["test", "pokemon"] }; // Example fallback
+        }
+
+        const response = await fetch(GEMINI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                // Optional: Add generationConfig for temperature, topK, topP if needed
+                // "generationConfig": {
+                //   "temperature": 0.7,
+                //   "topK": 1,
+                //   "topP": 1,
+                //   "maxOutputTokens": 256,
+                // },
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Gemini API Error:', errorData);
+            throw new Error(`Gemini API request failed with status ${response.status}: ${errorData.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        // console.log('Gemini API Raw Response:', data); // For debugging
+
+        // --- Parse Gemini's Response ---
+        // This parsing logic depends HEAVILY on how Gemini formats its response
+        // based on your prompt. You WILL need to inspect the actual response and adjust.
+        const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        // console.log('Gemini Generated Text:', generatedText); // For debugging
+
+        const extracted = { types: [], keywords: [] };
+        const typeMatch = generatedText.match(/TYPES:\s*([\w,\s-]*)/i);
+        if (typeMatch && typeMatch[1] && typeMatch[1].toLowerCase() !== 'none') {
+            extracted.types = typeMatch[1].split(',')
+                .map(t => t.trim().toLowerCase())
+                .filter(t => t.length > 0);
+        }
+
+        const keywordMatch = generatedText.match(/KEYWORDS:\s*([\w,\s-]*)/i);
+        if (keywordMatch && keywordMatch[1] && keywordMatch[1].toLowerCase() !== 'none') {
+            extracted.keywords = keywordMatch[1].split(',')
+                .map(k => k.trim().toLowerCase())
+                .filter(k => k.length > 0);
+        }
+        return extracted;
+
+    } catch (error) {
+        console.error('Error fetching semantic suggestions:', error);
+        alert(`Error with Semantic Search: ${error.message}. Check console for details.`);
+        return { types: [], keywords: [] }; // Return empty on error
+    } finally {
+        semanticSearchButton.disabled = false;
+        semanticSearchButton.textContent = 'Semantic Search';
+        loadingMessage.style.display = 'none';
+    }
+}
 
 // === Favorites Management ===
 const loadFavorites = () => {
@@ -150,17 +246,51 @@ const sortPokemonData = (data, sortCriteria) => {
     return sortedData;
 };
 
-const filterPokemonData = (data, filters) => {
+// --- MODIFIED: filterPokemonData to accept semantic keywords ---
+const filterPokemonData = (data, filters, semanticKeywords = []) => {
+    // Define thresholds (these are examples, adjust as you see fit)
+    // Height is in decimetres (0.1 meters), Weight is in hectograms (0.1 kg)
+    const SMALL_HEIGHT_THRESHOLD = 5;  // Less than 0.5 meters
+    const LARGE_HEIGHT_THRESHOLD = 20; // More than 2 meters
+    const LIGHT_WEIGHT_THRESHOLD = 100; // Less than 10 kg
+    const HEAVY_WEIGHT_THRESHOLD = 1000;// More than 100 kg
+
     return data.filter(pokemon => {
         const nameMatch = pokemon.name.toLowerCase().includes(filters.searchTerm);
         const typeMatch = filters.selectedType === 'all' || (pokemon.types && pokemon.types.includes(filters.selectedType));
         const generationMatch = filters.selectedGeneration === 'all' || pokemon.generation === filters.selectedGeneration;
-        return nameMatch && typeMatch && generationMatch;
+
+        let semanticMatch = true; // Assume true if no semantic keywords to check
+        if (semanticKeywords.length > 0) {
+            // Check if the Pokémon satisfies ALL semantic keywords provided by Gemini
+            semanticMatch = semanticKeywords.every(keyword => {
+                if (keyword === 'small' && pokemon.height !== undefined) {
+                    return pokemon.height < SMALL_HEIGHT_THRESHOLD;
+                } else if (keyword === 'large' && pokemon.height !== undefined) {
+                    return pokemon.height > LARGE_HEIGHT_THRESHOLD;
+                } else if (keyword === 'light' && pokemon.weight !== undefined) {
+                    return pokemon.weight < LIGHT_WEIGHT_THRESHOLD;
+                } else if (keyword === 'heavy' && pokemon.weight !== undefined) {
+                    return pokemon.weight > HEAVY_WEIGHT_THRESHOLD;
+                }
+                // Add more specific keyword checks here if desired (e.g., colors, abilities if you add them to summary)
+                else {
+                    // Default keyword check: search in Pokémon name
+                    return pokemon.name.toLowerCase().includes(keyword);
+                }
+            });
+        }
+        return nameMatch && typeMatch && generationMatch && semanticMatch;
     });
 };
 
+// --- MODIFIED: processAndDisplayPokemon to handle semantic keywords ---
+let currentSemanticKeywords = []; // Add this to global state variables
+
 const processAndDisplayPokemon = () => {
-    let processedData = filterPokemonData(allPokemonSummaryData, currentFilters);
+    // 1. Filter (Pass semantic keywords here)
+    let processedData = filterPokemonData(allPokemonSummaryData, currentFilters, currentSemanticKeywords);
+    // ... (rest of sort, paginate, render - remains the same) ...
     processedData = sortPokemonData(processedData, currentSort);
     totalPages = Math.max(1, Math.ceil(processedData.length / ITEMS_PER_PAGE));
     currentPage = Math.max(1, Math.min(currentPage, totalPages));
@@ -170,6 +300,7 @@ const processAndDisplayPokemon = () => {
     displayPokemonGrid(currentlyDisplayedData);
     renderPaginationControls();
 };
+
 
 const displayPokemonGrid = (pokemonList) => {
     pokedexGrid.innerHTML = '';
@@ -219,6 +350,55 @@ const handleSortChange = (event) => {
     currentSort = event.target.value;
     currentPage = 1; processAndDisplayPokemon();
 };
+
+// --- ADDED: Semantic Search Button Handler ---
+const handleSemanticSearch = async () => {
+    const query = semanticSearchInput.value.trim();
+    if (!query) {
+        alert("Please enter a description for semantic search.");
+        return;
+    }
+
+    const suggestions = await fetchSemanticSuggestions(query);
+    // console.log("Applying suggestions:", suggestions); // For debugging
+
+    // Reset simple search when semantic search is used, or combine them.
+    // For simplicity, let's prioritize semantic results for now.
+    currentFilters.searchTerm = ''; // Clear the basic search term
+    searchInput.value = ''; // Clear the basic search input field
+
+    currentSemanticKeywords = suggestions.keywords || []; // Store keywords for filtering
+
+    // Apply extracted types (if any)
+    // This is a simple take: uses the first valid type found.
+    // You might want to allow multiple type selections or more sophisticated logic.
+    let typeApplied = false;
+    if (suggestions.types && suggestions.types.length > 0) {
+        const validTypes = allPokemonSummaryData.flatMap(p => p.types); // Get all unique types from your data
+        const firstValidSuggestedType = suggestions.types.find(st => validTypes.includes(st));
+
+        if (firstValidSuggestedType) {
+            currentFilters.selectedType = firstValidSuggestedType;
+            // Update UI for type filter buttons
+            document.querySelectorAll('.type-filter-button').forEach(button => {
+                button.classList.toggle('active', button.dataset.type === firstValidSuggestedType);
+            });
+            typeApplied = true;
+        }
+    }
+    // If no types suggested or applied from Gemini, reset to 'all' if you want, or keep current
+    if (!typeApplied) {
+        // currentFilters.selectedType = 'all';
+        // document.querySelectorAll('.type-filter-button').forEach(button => {
+        //     button.classList.toggle('active', button.dataset.type === 'all');
+        // });
+    }
+
+
+    currentPage = 1; // Reset to first page
+    processAndDisplayPokemon();
+};
+
 const goToPrevPage = () => { if (currentPage > 1) { currentPage--; processAndDisplayPokemon(); }};
 const goToNextPage = () => { if (currentPage < totalPages) { currentPage++; processAndDisplayPokemon(); }};
 
@@ -403,7 +583,10 @@ function romanToNum(romanUpper) {
     return num;
 }
 
+// === Initialization ===
 const initializePokedex = async () => {
+    currentSemanticKeywords = []; // <<< ADD THIS LINE HERE to reset semantic keywords
+
     loadFavorites();
     loadingMessage.textContent = 'Loading Pokémon Data...';
     loadingMessage.style.display = 'block';
@@ -448,6 +631,7 @@ const initializePokedex = async () => {
     }
 };
 
+
 // === Event Listeners ===
 searchInput.addEventListener('input', handleSearchInput);
 typeFilterContainer.addEventListener('click', handleTypeFilterClick);
@@ -458,6 +642,13 @@ nextPageButton.addEventListener('click', goToNextPage);
 closeModalButton.addEventListener('click', hideModal);
 window.addEventListener('click', (event) => { if (event.target === modal) hideModal(); });
 window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.style.display === 'flex') hideModal(); });
+
+semanticSearchButton.addEventListener('click', handleSemanticSearch); // New
+semanticSearchInput.addEventListener('keypress', (event) => { // Optional: allow Enter key
+    if (event.key === 'Enter') {
+        handleSemanticSearch();
+    }
+});
 
 // Initialize
 initializePokedex();

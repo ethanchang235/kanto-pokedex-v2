@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex</title>
+    <title>Pokédex</title> <!-- Consider "Pokédex - All Generations" -->
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,27 +12,40 @@
 <body>
     <header>
         <h1>Pokédex</h1>
-        <p>All Generations</p>
+        <p>Now with Generations I-IX</p>
     </header>
 
     <main>
         <!-- Filter Controls -->
         <div class="filter-controls">
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Search Pokémon by name...">
+            <!-- New Wrapper for Search Bars -->
+            <div class="search-bars-container">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search Pokémon by name...">
+                </div>
+                <div class="semantic-search-container">
+                    <input type="text" id="semantic-search-input" placeholder="Describe (e.g., 'small fire type')...">
+                    <button id="semantic-search-button">Semantic Search</button>
+                </div>
             </div>
-            <div id="type-filter-container" class="type-filter-container">
-                <button class="type-filter-button active" data-type="all">All</button>
-                <!-- Type filter buttons inserted here -->
+            <!-- End Search Bars Wrapper -->
+
+            <div> <!-- Wrapper for Type Filters -->
+                <h4 class="filter-group-title">Filter by Type</h4>
+                <div id="type-filter-container" class="type-filter-container">
+                    <button class="type-filter-button active" data-type="all">All Types</button>
+                    <!-- Type filter buttons -->
+                </div>
             </div>
 
-            <!-- Generation Filters -->
-            <div id="generation-filter-container" class="generation-filter-container">
-                <button class="generation-filter-button active" data-generation="all">All Gens</button>
-                <!-- Generation filter buttons will be inserted here by JavaScript -->
+            <div> <!-- Wrapper for Generation Filters -->
+                <h4 class="filter-group-title">Filter by Generation</h4>
+                <div id="generation-filter-container" class="generation-filter-container">
+                    <button class="generation-filter-button active" data-generation="all">All Gens</button>
+                    <!-- Generation filter buttons -->
+                </div>
             </div>
 
-             <!-- Sorting Dropdown -->
             <div class="sort-container">
                  <label for="sort-select">Sort by:</label>
                  <select id="sort-select">
@@ -47,7 +60,7 @@
 
         <div id="pokedex-grid" class="pokedex-grid">
             <!-- Pokémon cards inserted here -->
-            <div id="loading-message">Loading Pokémon...</div>
+            <div id="loading-message">Loading Pokémon...</div> <!-- Or "Loading Pokémon Data..." -->
         </div>
 
          <!-- Pagination Controls -->
@@ -58,15 +71,15 @@
         </div>
     </main>
 
-    <!-- Modal Structure -->
+    <!-- Modal Structure (no changes needed here from what you provided) -->
     <div id="pokemon-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">×</span>
+            <span class="close-button">×</span> <!-- Corrected '×' symbol -->
             <div class="modal-header">
                 <h2 id="modal-pokemon-name">Pokémon Name</h2>
                 <div class="modal-header-buttons">
-                     <button id="favorite-toggle" class="favorite-button" title="Toggle Favorite">☆</button> <!-- Favorite Button -->
-                     <button id="shiny-toggle" title="Toggle Shiny Sprite">✨</button> <!-- Shiny Toggle Button -->
+                     <button id="favorite-toggle" class="favorite-button" title="Toggle Favorite">☆</button>
+                     <button id="shiny-toggle" title="Toggle Shiny Sprite">✨</button>
                 </div>
             </div>
             <p id="modal-pokemon-number">#000</p>
@@ -91,24 +104,19 @@
                 <!-- Stats bars will be inserted here -->
             </div>
 
-             <!-- Type Effectiveness -->
             <h3>Type Effectiveness</h3>
             <div id="modal-type-effectiveness" class="type-effectiveness-container">
-                <!-- Effectiveness info will be inserted here -->
                  <p id="effectiveness-loading">Calculating effectiveness...</p>
             </div>
 
 
-            <!-- Evolution Chain -->
             <h3>Evolution Chain</h3>
             <div id="modal-evolution-chain" class="evolution-chain-container">
-                <!-- Evolution chain will be inserted here -->
                 <p id="evolution-loading">Loading evolution...</p>
             </div>
-
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script> <!-- Added defer attribute for safety -->
 </body>
 </html>

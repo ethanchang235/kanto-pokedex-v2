@@ -36,6 +36,127 @@ main {
     margin: 20px auto;
 }
 
+/* Filter Controls Container */
+.filter-controls {
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column; /* Stack filter groups vertically */
+    gap: 20px; /* Increased gap between filter groups */
+}
+
+/* Search Container (for the original name/ID search) */
+.search-container {
+     text-align: center; /* Center the input within its container */
+ }
+#search-input {
+    padding: 10px 15px;
+    width: 100%; /* Make it take more width */
+    max-width: 600px; /* But not too wide on large screens */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Center the input field itself if width < max-width */
+    display: block; /* Ensure margin auto works */
+}
+
+/* Semantic Search Styles */
+.semantic-search-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center; /* Center content within this container */
+    align-items: center;
+    width: 100%; /* Take full width of its column */
+}
+
+#semantic-search-input {
+    flex-grow: 1; /* Allow input to take available space */
+    max-width: 500px; /* Limit its max width */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+}
+
+#semantic-search-button {
+    padding: 10px 18px; /* Slightly more padding */
+    background-color: #4CAF50; /* A different, appealing color for action */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+#semantic-search-button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+    transform: translateY(-1px);
+}
+#semantic-search-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: translateY(0);
+}
+
+
+/* Type Filter Container - already good with flex-wrap */
+.type-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    /* margin-bottom: 15px; /* Spacing handled by .filter-controls gap */
+}
+/* Type filter button styles remain largely the same, ensure they are visually distinct */
+
+
+/* Generation Filter Container - already good with flex-wrap */
+.generation-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    /* margin-top: 15px; /* Spacing handled by .filter-controls gap */
+}
+/* Generation filter button styles remain largely the same */
+
+
+/* Sort Container - center it */
+.sort-container {
+    text-align: center;
+    /* margin-top: 20px; /* Spacing handled by .filter-controls gap */
+}
+.sort-container label {
+    margin-right: 10px;
+    font-size: 0.95em;
+    color: #555;
+    font-weight: bold;
+}
+#sort-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+    background-color: white; /* Ensure it's not transparent */
+}
+
+/* Optional: Add a subtle title/divider for filter sections if desired */
+.filter-group-title {
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
 .pokedex-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -785,4 +906,136 @@ main {
     color: #888;
     font-style: italic;
     padding: 10px 0; /* Add some padding for visibility */
+}
+
+/* Filter Controls Container - ensure it allows children to stretch if needed */
+.filter-controls {
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* New Wrapper for Search Bars - This is key for alignment */
+.search-bars-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to new line on smaller screens */
+    gap: 15px;       /* Space between the two search groups */
+    align-items: center; /* Vertically align items if they have different heights */
+}
+
+/* Container for the original name search */
+.search-container {
+    flex: 1 1 300px; /* Grow, shrink, base width 300px. Allows it to take more space. */
+    display: flex; /* To make its child input take full width */
+}
+#search-input {
+    width: 100%; /* Take full width of its .search-container parent */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+#search-input:focus {
+    outline: none;
+    border-color: #ef5350; /* Or your preferred focus color */
+    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.2);
+}
+
+/* Container for the semantic search input and button */
+.semantic-search-container {
+    flex: 1 1 350px; /* Grow, shrink, slightly larger base width due to button */
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Align input and button vertically */
+}
+
+#semantic-search-input {
+    flex-grow: 1; /* Input takes available space within this container */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+}
+
+#semantic-search-button {
+    padding: 10px 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: bold;
+    transition: background-color 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+#semantic-search-button:hover {
+    background-color: #45a049;
+    transform: translateY(-1px);
+}
+#semantic-search-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: translateY(0);
+}
+
+/* Titles for filter groups - keep as is or adjust margins if needed */
+.filter-group-title {
+    text-align: center;
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 8px;
+    margin-top: 5px; /* Add a little space above titles if search bars wrap */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* Optional titles for filter groups - make them smaller */
+.filter-group-title {
+    text-align: center;
+    font-size: 0.85em; /* Smaller */
+    color: #666;    /* Lighter */
+    margin-bottom: 8px; /* Less margin */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600; /* Slightly bolder if you want to keep them clear */
+}
+
+/* Type and Generation Filter Containers */
+.type-filter-container, .generation-filter-container {
+    /* margin-top: 10px; /* Reduced margin if titles are used */
+    /* gap: 6px; /* Slightly smaller gap between buttons */
+}
+
+/* Sort Container */
+.sort-container {
+    text-align: center;
+    margin-top: 5px; /* Reduced top margin */
+}
+.sort-container label {
+    margin-right: 8px; /* Keep this for spacing */
+}
+
+@media (min-width: 768px) {
+    .search-bars-container {
+        flex-direction: row; /* Side-by-side on wider screens */
+        align-items: center; /* Align items vertically */
+    }
+    .search-container {
+        flex-grow: 1; /* Allow original search to take more space */
+    }
+    #search-input {
+        max-width: none; /* Allow it to fill its flex space */
+    }
+    .semantic-search-container {
+        flex-grow: 1; /* Allow semantic search to take space */
+        max-width: 50%; /* Example: limit semantic search part */
+    }
 }

@@ -19,7 +19,6 @@ async function fetchAllPokemonDetails() {
     const allPokemonSummaries = [];
     let processedCount = 0;
 
-    // Fetching by ID is generally more reliable than the full list for all details
     for (let id = 1; id <= MAX_POKEMON_ID; id++) {
         try {
             console.log(`Fetching data for ID: ${id} (${++processedCount}/${MAX_POKEMON_ID})`);
@@ -27,13 +26,11 @@ async function fetchAllPokemonDetails() {
             const pokemonResponse = await fetch(`${POKEAPI_BASE_URL}pokemon/${id}`);
             if (!pokemonResponse.ok) {
                 console.warn(`Skipping ID ${id}: Failed to fetch main data (status ${pokemonResponse.status})`);
-                // Optionally add a short delay even on failure to avoid hammering API
                 await new Promise(resolve => setTimeout(resolve, 100));
                 continue;
             }
             const pokemonData = await pokemonResponse.json();
 
-            // Ensure species URL is valid before fetching
             if (!pokemonData.species || !pokemonData.species.url) {
                 console.warn(`Skipping ID ${id} (${pokemonData.name}): Missing species URL.`);
                 await new Promise(resolve => setTimeout(resolve, 50));
@@ -46,23 +43,21 @@ async function fetchAllPokemonDetails() {
                 continue;
             }
             const speciesData = await speciesResponse.json();
-
-            // Ensure generation data exists
             const generationName = speciesData.generation ? speciesData.generation.name : 'unknown-generation';
 
             allPokemonSummaries.push({
                 id: pokemonData.id,
                 name: pokemonData.name,
-                sprite: pokemonData.sprites.front_default, // Can be null for some forms
+                sprite: pokemonData.sprites.front_default,
                 types: pokemonData.types.map(typeInfo => typeInfo.type.name),
-                generation: generationName
+                generation: generationName,
+                height: pokemonData.height,   // <<< ADD THIS LINE
+                weight: pokemonData.weight    // <<< ADD THIS LINE
             });
 
-            // Add a small delay to be respectful to the API
-            await new Promise(resolve => setTimeout(resolve, 50)); // 50ms delay
+            await new Promise(resolve => setTimeout(resolve, 50));
         } catch (err) {
             console.error(`Error processing ID ${id}: ${err.message}`);
-            // Add a longer delay on error to avoid overwhelming the API if there's a persistent issue
             await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
@@ -70,15 +65,16 @@ async function fetchAllPokemonDetails() {
 }
 
 async function generateSummaryFile() {
+    // ... (this function remains the same as before) ...
     try {
         const summaries = await fetchAllPokemonDetails();
-        const dirPath = path.join(__dirname, 'data'); // Creates 'data' folder in the script's directory (project root)
+        const dirPath = path.join(__dirname, 'data');
         if (!fs.existsSync(dirPath)) {
             fs.mkdirSync(dirPath, { recursive: true });
             console.log(`Created directory: ${dirPath}`);
         }
         const filePath = path.join(dirPath, 'all_pokemon_summary.json');
-        fs.writeFileSync(filePath, JSON.stringify(summaries, null, 2)); // null, 2 for pretty printing
+        fs.writeFileSync(filePath, JSON.stringify(summaries, null, 2));
         console.log(`\nSuccessfully generated ${filePath} with ${summaries.length} Pokémon!`);
     } catch (error) {
         console.error('Failed to generate summary file:', error);
