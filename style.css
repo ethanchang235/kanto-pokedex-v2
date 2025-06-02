@@ -59,13 +59,13 @@ main {
 
 /* Container for the original name/ID search input */
 .search-container {
-    display: flex; /* Allows input to take full width easily */
+    display: flex;
     width: 100%;
 }
 #search-input {
     width: 100%;
-    max-width: 700px; /* Optional: Limit max width, centers due to margin: auto below */
-    margin: 0 auto; /* Centers the input if max-width is applied */
+    max-width: 700px;
+    margin: 0 auto;
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -86,7 +86,7 @@ main {
     width: 100%;
 }
 #semantic-search-input {
-    flex-grow: 1; /* Input takes available space */
+    flex-grow: 1;
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -120,7 +120,7 @@ main {
     font-size: 0.85em;
     color: #666;
     margin-bottom: 8px;
-    margin-top: 10px; /* Space above title if there are elements before it */
+    margin-top: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
@@ -187,7 +187,7 @@ main {
     background-color: #e9e9e9;
     color: #444;
     transition: opacity 0.2s, transform 0.2s, background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
-    text-transform: capitalize; /* Handles "Gen I" correctly */
+    text-transform: capitalize;
 }
 .generation-filter-button:not(.active) { opacity: 0.7; }
 .generation-filter-button:hover:not(.active) { opacity: 0.9; background-color: #dcdcdc; }
@@ -201,10 +201,46 @@ main {
     transform: scale(1.05);
 }
 
+/* Container for additional filters (like favorites) and sort */
+.additional-filters-sort-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+/* Favorites Filter Specific Container */
+.favorites-filter-container {
+    /* Intentionally left blank, flex properties on parent handle alignment */
+}
+
+#favorites-filter-toggle {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+#favorites-filter-toggle:hover {
+    background-color: #f0f0f0;
+    border-color: #bbb;
+}
+#favorites-filter-toggle.active {
+    background-color: #FFD700;
+    color: #333;
+    border-color: #e6c200;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
 /* Sort Container */
 .sort-container {
-    text-align: center;
-    margin-top: 10px; /* Adjusted from 5px for a bit more space */
+    text-align: right; /* Aligns content if container is wider than content */
 }
 .sort-container label {
     margin-right: 8px;
@@ -222,7 +258,7 @@ main {
 
 /* Pokedex Grid */
 .pokedex-grid {
-    margin-top: 20px; /* Space below filter controls */
+    margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 15px;
@@ -284,8 +320,8 @@ main {
     align-items: center;
     z-index: 10;
 }
-.pokemon-card.favorite-card { /* Optional: visual cue for favorited cards */
-    /* border-left: 4px solid #FFD700; */
+.pokemon-card.favorite-card {
+    /* Optional: border-left: 4px solid #FFD700; */
 }
 
 /* Pagination */
@@ -314,7 +350,7 @@ main {
 }
 .modal-content {
     background-color: #fff; margin: auto; padding: 30px;
-    border-radius: 10px; width: 90%; max-width: 500px; /* Adjusted max-width */
+    border-radius: 10px; width: 90%; max-width: 500px;
     position: relative; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
@@ -394,7 +430,7 @@ main {
 }
 #modal-pokemon-description { font-size: 0.9em; color: #5f4339; line-height: 1.4; }
 
-.modal-content h3 {
+.modal-content h3 { /* Section titles in modal */
     margin-top: 20px; margin-bottom: 10px;
     text-align: left; font-size: 1.2em;
     border-bottom: 1px solid #eee; padding-bottom: 5px;
@@ -468,5 +504,5 @@ main {
     color: #888;
     font-style: italic;
     padding: 10px 0;
-    width: 100%; /* Make sure it takes full width to center text */
+    width: 100%;
 }
